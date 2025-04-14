@@ -1,0 +1,3 @@
+[submodule "42libC"]
+	path = 42libC
+	url = git@github.com:gschwander/42libC.git
