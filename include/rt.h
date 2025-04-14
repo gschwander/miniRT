@@ -6,10 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/04/14 14:31:38 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:04:24 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef RT_H    
 # define RT_H
 
 typedef struct s_vec t_vec;

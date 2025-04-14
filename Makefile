@@ -21,6 +21,7 @@ C_FILES = 	SRC/RT/bmp.c \
 			SRC/parsing/element/element_utils.c \
 			SRC/parsing/element/atoi_double.c
 O_FILES = $(C_FILES:%.c=build/%.o)
+include = include/
 C_FLAGS = -Wall -Werror -Wextra -Iinclude
 NAME = miniRT
 
@@ -29,11 +30,13 @@ NAME = miniRT
 
 all: $(NAME)
 
-$(NAME): $(C_FILES) | build
-	$(CC) -g $^ -o $(NAME) -L ./42libC -lft -lm
+$(NAME): $(O_FILES) | build
+	$(CC) -g $(O_FILES) -o $(NAME) -L ./42libC -lft -lm
 
-%.o: %.c 
-	$(CC) -g -c $< -o $@
+build/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(C_FLAGS) -g -c $< -o $@
+
 
 build:
 	mkdir -p build
