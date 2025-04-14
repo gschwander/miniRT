@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   vector1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 23:27:57 by kgriset           #+#    #+#             */
-/*   Updated: 2025/03/25 13:42:31 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "miniRT.h"
 
 double norm2(const t_vec v)
 {

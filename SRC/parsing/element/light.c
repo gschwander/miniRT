@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:30:27 by gschwand          #+#    #+#             */
-/*   Updated: 2025/03/29 11:33:00 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "miniRT.h"
 
 void	parse_light(t_rt *rt, char *line)
 {

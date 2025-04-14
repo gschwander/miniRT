@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:32:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/03/29 10:21:13 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "miniRT.h"
 
 static int	find_sphere_id(t_sphere *sphere)
 {

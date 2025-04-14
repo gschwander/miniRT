@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/04/01 08:23:05 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:31:38 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef RT_H
-# define RT_H
 
-# include "../42_MyLibC/mylibc.h"
+# define RT_H
 
 typedef struct s_vec t_vec;
 

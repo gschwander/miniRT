@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 21:20:43 by kgriset           #+#    #+#             */
-/*   Updated: 2025/01/31 11:21:31 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/14 14:09:38 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parsing.h"
+#include "parsing.h"
 
 t_link_list *init_alloc(t_link_list **list)
 {

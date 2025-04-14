@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   rt_ft_strtrim.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 16:47:30 by kgriset           #+#    #+#             */
-/*   Updated: 2025/03/26 13:51:52 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "miniRT.h"
 
 static int	rt_ft_isinset(char c, char const *set)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   rt_ft_substr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:13:32 by kgriset           #+#    #+#             */
-/*   Updated: 2025/03/26 13:50:20 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "miniRT.h"
 
 static char	*create_sub(const char *s, char *sub, unsigned int start,
 		size_t len)

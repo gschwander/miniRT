@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   rt_ft_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 16:41:18 by kgriset           #+#    #+#             */
-/*   Updated: 2025/03/26 13:48:39 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "miniRT.h"
 
 static void	rt_free_split(char **split, char *s_trimmed, size_t size)
 {

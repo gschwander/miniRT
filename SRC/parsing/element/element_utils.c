@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 09:38:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/03/30 11:52:59 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "miniRT.h"
 
 // int	check_size_tab(char **tab)
 void	check_size_tab(t_rt *rt, char **tab)

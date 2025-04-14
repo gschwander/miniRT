@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:32 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/02 15:26:01 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "miniRT.h"
 
 void	print_lst_file(t_file **file)
 {

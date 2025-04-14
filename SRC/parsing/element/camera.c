@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 10:15:25 by gschwand          #+#    #+#             */
-/*   Updated: 2025/03/29 11:24:30 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "miniRT.h"
 
 // int	parse_camera(t_rt *rt, char *line)
 void	parse_camera(t_rt *rt, char *line)

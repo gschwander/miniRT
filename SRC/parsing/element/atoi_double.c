@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 13:51:53 by gschwand          #+#    #+#             */
-/*   Updated: 2025/03/26 17:11:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "miniRT.h"
 
 double	absolut_value(const char *s, double result)
 {

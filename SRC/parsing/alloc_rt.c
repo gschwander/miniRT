@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:41 by gschwand          #+#    #+#             */
-/*   Updated: 2025/03/31 14:56:11 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parsing.h"
+#include "include/parsing.h"
 
 void	check_if_element(t_rt * rt, char *str)
 {
