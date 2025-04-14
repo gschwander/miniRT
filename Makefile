@@ -21,14 +21,16 @@ C_FILES = 	SRC/RT/bmp.c \
 			SRC/parsing/element/element_utils.c \
 			SRC/parsing/element/atoi_double.c
 O_FILES = $(C_FILES:%.c=build/%.o)
-include = include/
-C_FLAGS = -Wall -Werror -Wextra -Iinclude
+C_FLAGS = -Wall -Werror -Wextra -Iinclude 
 NAME = miniRT
 
 .PHONY: all clean fclean re
 .DEFAULT: all
 
-all: $(NAME)
+all: $(NAME) 42libC
+
+42libC:
+	$(MAKE) -C 42libC
 
 $(NAME): $(O_FILES) | build
 	$(CC) -g $(O_FILES) -o $(NAME) -L ./42libC -lft -lm

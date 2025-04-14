@@ -6,15 +6,15 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:01:40 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/01 08:23:27 by kgriset          ###   ########.fr       */
+/*   Updated: 2025/04/14 16:11:48 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
-# ifndef RT_H
-#  include "rt.h"
-# endif
+
+# include "rt.h"
+
 typedef struct s_file {
     char            *line;
     struct s_file   *next;

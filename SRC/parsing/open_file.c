@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:32 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:16:57 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ void	alloc_file_lst(t_rt * rt, t_file **file, int fd)
 t_file	**open_file(t_rt * rt, char *namefile)
 {
 	t_file	**file;
-	t_file	*node;
 	char	*line;
 
 	// file = malloc(sizeof(t_file *));

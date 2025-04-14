@@ -6,11 +6,11 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:37 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:10:21 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/parsing.h"
+#include "parsing.h"
 
 // Reverse strncmp
 static int	ft_strrncmp(const char *s1, const char *s2, size_t n)

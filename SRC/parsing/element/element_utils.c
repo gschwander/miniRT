@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 09:38:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:18:37 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,8 @@ t_vec	parse_color(t_rt *rt, char *line)
 	// if (color->x < 0 || color->y < 0 || color->z < 0 || color->x > 255
 	// 	|| color->y > 255 || color->z > 255)
 	// 	return (ft_putstr_fd("Error: Invalid color\n", 2), NULL);
-    if (color.x < 0 || color.y < 0 || color.z < 0 || color.x > 255
-		|| color.y > 255 || color.z > 255)
-        exit_error(rt, "Error: Invalid color");
+    if (color.x < 0 || color.y < 0 || color.z < 0 || color.x > 255 || color.y > 255 || color.z > 255)
+		exit_error(rt, "Error: Invalid color");
 	return (color);
 }
 
