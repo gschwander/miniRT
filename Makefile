@@ -27,18 +27,17 @@ NAME = miniRT
 .PHONY: all clean fclean re
 .DEFAULT: all
 
-all: $(NAME) 42libC
+all: 42libC $(NAME) 
 
 42libC:
 	$(MAKE) -C 42libC
 
-$(NAME): $(O_FILES) | build
-	$(CC) -g $(O_FILES) -o $(NAME) -L ./42libC -lft -lm
+$(NAME): $(O_FILES) 42libC | build
+	$(CC) -g $(O_FILES) -o $(NAME) -L ./42libC -L -42lC -lm
 
-build/%.o: %.c
+build/%.o: %.c 42libC
 	@mkdir -p $(dir $@)
 	$(CC) $(C_FLAGS) -g -c $< -o $@
-
 
 build:
 	mkdir -p build

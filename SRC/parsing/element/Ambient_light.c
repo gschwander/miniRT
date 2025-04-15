@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:04:52 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/15 09:48:01 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 void	parse_amb_light(t_rt *rt, char *line)
 {
 	char	**tab;
-	int		i;
+	// int		i;
 
-	i = 0;
+	// i = 0;
 	// tab = ft_split(line, ' ');
     tab = rt_ft_split(rt, line, ' ');
 	if (tab[1] && tab[2])

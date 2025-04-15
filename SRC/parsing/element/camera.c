@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 10:15:25 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/15 09:48:09 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 void	parse_camera(t_rt *rt, char *line)
 {
 	char	**tab;
-	int		i;
+	// int		i;
 
-	i = 0;
+	// i = 0;
 	// tab = ft_split(line, ' ');
 	tab = rt_ft_split(rt, line, ' ');
 	// if (!tab)
