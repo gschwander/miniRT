@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_ft_split.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 16:41:18 by kgriset           #+#    #+#             */
-/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "miniRT.h"
 
 static void	rt_free_split(char **split, char *s_trimmed, size_t size)
@@ -26,8 +14,7 @@ static void	rt_free_split(char **split, char *s_trimmed, size_t size)
 	free(split);
 }
 
-static char	*rt_count_split(t_rt *rt, const char *s, char c,
-		size_t *sub_str_count)
+static char	*rt_count_split(t_rt *rt, const char *s, char c, size_t *sub_str_count)
 {
 	char	set[2];
 	char	*s_trimmed;
@@ -87,8 +74,7 @@ char	**rt_ft_split(t_rt *rt, char const *s, char c)
 	char	*s_trimmed;
 
 	s_trimmed = rt_count_split(rt, s, c, &sub_str_count);
-	split = wrap_malloc(rt,  sizeof(*split)
-			* (sub_str_count + 1));
+	split = wrap_malloc(rt,  sizeof(*split)* (sub_str_count + 1));
 	if (!split)
 	{
 		free(s_trimmed);
