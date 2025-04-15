@@ -1,6 +1,4 @@
-C_FILES = 	SRC/gnl/get_next_line.c \
-			SRC/gnl/get_next_line_utils.c \
-			SRC/RT/bmp.c \
+C_FILES = 	SRC/RT/bmp.c \
 			SRC/RT/miniRT.c \
 			SRC/RT/vector1.c \
 			SRC/RT/vector.c \
