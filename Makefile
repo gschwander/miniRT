@@ -1,13 +1,13 @@
 C_FILES = 	SRC/bmp/bmp.c \
-			SRC/split/rt_ft_split.c \
-			SRC/split/rt_ft_strtrim.c \
+			SRC/memory/split/rt_ft_split.c \
+			SRC/memory/split/rt_ft_strtrim.c \
+			SRC/memory/rt_ft_strdup.c \
+			SRC/memory/rt_ft_substr.c \
+			SRC/memory/wrap_malloc.c \
+			SRC/vec_op/vector1.c \
+			SRC/vec_op/vector.c \
 			SRC/RT/miniRT.c \
-			SRC/RT/vector1.c \
-			SRC/RT/vector.c \
-			SRC/RT/wrap_malloc.c \
 			SRC/RT/exit_error.c \
-			SRC/RT/rt_ft_substr.c \
-			SRC/RT/rt_ft_strdup.c \
 			SRC/parsing/parsing.c \
 			SRC/parsing/check_args.c \
 			SRC/parsing/open_file.c \
