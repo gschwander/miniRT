@@ -1,4 +1,6 @@
-C_FILES = 	SRC/RT/bmp.c \
+C_FILES = 	SRC/gnl/get_next_line.c \
+			SRC/gnl/get_next_line_utils.c \
+			SRC/RT/bmp.c \
 			SRC/RT/miniRT.c \
 			SRC/RT/vector1.c \
 			SRC/RT/vector.c \
@@ -24,7 +26,7 @@ O_FILES = $(C_FILES:%.c=build/%.o)
 C_FLAGS = -Wall -Werror -Wextra -Iinclude 
 NAME = miniRT
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re 42libC
 .DEFAULT: all
 
 all: 42libC $(NAME) 
@@ -32,10 +34,10 @@ all: 42libC $(NAME)
 42libC:
 	$(MAKE) -C 42libC
 
-$(NAME): $(O_FILES) 42libC | build
-	$(CC) -g $(O_FILES) -o $(NAME) -L ./42libC -L -42lC -lm
+$(NAME):  $(O_FILES)  | 42libC build 
+	$(CC) -g $(O_FILES) -o $(NAME) -L ./42libC -l:42libC.a -lm
 
-build/%.o: %.c 42libC
+build/%.o: %.c | 42libC
 	@mkdir -p $(dir $@)
 	$(CC) $(C_FLAGS) -g -c $< -o $@
 
