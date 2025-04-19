@@ -1,4 +1,5 @@
-C_FILES = 	SRC/bmp/bmp.c \
+C_FILES = 	SRC/main.c \
+			SRC/bmp/bmp.c \
 			SRC/memory/rt_ft_split.c \
 			SRC/memory/rt_ft_strdup.c \
 			SRC/memory/rt_ft_substr.c \

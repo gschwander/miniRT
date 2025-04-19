@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 00:19:53 by kgriset           #+#    #+#             */
-/*   Updated: 2025/04/14 14:09:06 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:11:19 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,33 +128,4 @@ unsigned char * render (t_rt * rt)
         }
     }
     return image;
-}
-
-int main (int ac,char ** av)
-{
-    // struct rlimit rlim;;
-    // rlim.rlim_cur = 1024 * 1000;
-    // rlim.rlim_max = 1024 * 1000;
-    // if (setrlimit(RLIMIT_DATA, &rlim) == -1)
-    // {
-    //     perror("setrlimit");
-    //     return (43);
-    // }
-    
-    t_rt rt;
-    if (check_args(ac, av))
-		return (1);
-    rt = (t_rt){};
-    rt.graphic_heap = init_alloc(&rt.graphic_heap); 
-    rt.parsing_heap = init_alloc(&rt.parsing_heap);  
-    rt.current_heap = rt.parsing_heap;
-    parsing_minirt(&rt,av[1]);
-    // rt.fov = 80 * M_PI / 180;
-    rt.W = 1024;
-    rt.H = 1024;
-    rt.current_heap = rt.graphic_heap;
-    save_img(&rt, render(&rt), rt.W, rt.H);
-    close(rt.fd_file);
-    free_heap(&rt);
-    return 0;
 }

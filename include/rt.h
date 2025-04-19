@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/04/14 16:22:36 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:11:13 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void free_heap(t_rt *rt);
 t_link_list *init_alloc(t_link_list **list);
 
 // miniRT.c
+unsigned char * render(t_rt *rt);
+
 // bmp.c
 void save_img(t_rt * rt, const unsigned char * pixels, int W, int H); // rgb pixel
 // exit_error.c

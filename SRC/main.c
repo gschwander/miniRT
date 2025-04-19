@@ -6,25 +6,28 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 14:09:31 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:09:16 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "miniRT.h"
 
-int	mini_rt(char *file)
+int main (int ac,char ** av)
 {
-	t_rt	*rt;
-	
-	rt = parsing_minirt(file);
-	return (0);
-}
-
-int	main(int ac, char **av)
-{
-	if (check_args(ac, av))
+    t_rt rt;
+    if (check_args(ac, av))
 		return (1);
-	if (mini_rt(av[1]))
-		return (1);
-	return (0);
+    rt = (t_rt){};
+    rt.graphic_heap = init_alloc(&rt.graphic_heap); 
+    rt.parsing_heap = init_alloc(&rt.parsing_heap);  
+    rt.current_heap = rt.parsing_heap;
+    parsing_minirt(&rt,av[1]);
+    // rt.fov = 80 * M_PI / 180;
+    rt.W = 1024;
+    rt.H = 1024;
+    rt.current_heap = rt.graphic_heap;
+    save_img(&rt, render(&rt), rt.W, rt.H);
+    close(rt.fd_file);
+    free_heap(&rt);
+    return 0;
 }
