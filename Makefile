@@ -1,6 +1,5 @@
 C_FILES = 	SRC/bmp/bmp.c \
-			SRC/memory/split/rt_ft_split.c \
-			SRC/memory/split/rt_ft_strtrim.c \
+			SRC/memory/rt_ft_split.c \
 			SRC/memory/rt_ft_strdup.c \
 			SRC/memory/rt_ft_substr.c \
 			SRC/memory/wrap_malloc.c \
