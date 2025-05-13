@@ -26,3 +26,8 @@ t_vec vec_m_vec(const t_vec a, const t_vec b)
     m_v.z = a.z * b.z;
     return m_v;
 }
+
+t_vec cross(const t_vec a, const t_vec b)
+{
+    return (t_vec){a.y*b.z - b.y*a.z,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x};
+}

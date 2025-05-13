@@ -8,6 +8,7 @@ C_FILES = 	SRC/main.c \
 			SRC/vec_op/vector.c \
 			SRC/RT/miniRT.c \
 			SRC/RT/exit_error.c \
+			SRC/RT/pcg32.c \
 			SRC/parsing/parsing.c \
 			SRC/parsing/check_args.c \
 			SRC/parsing/open_file.c \
