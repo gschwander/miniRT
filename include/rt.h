@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/04/19 16:21:25 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:14:41 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ typedef struct s_ray {
     t_vec origin;
     t_vec direction;
 } t_ray;
+
+typedef struct s_point {
+    t_vec P;
+    t_vec N;
+} t_point;
 
 typedef struct s_ambient_light {
     double intensity;
@@ -112,8 +117,12 @@ typedef struct s_rt {
     t_pcg32_random rng;
     int W;
     int H;
+    int i;
+    int j;
     int fd_file;
     double fov;
+    double min_t;
+    unsigned char * image;
     t_link_list * graphic_heap;
     t_link_list * parsing_heap;
     t_link_list * current_heap;

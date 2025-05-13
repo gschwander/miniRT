@@ -22,7 +22,7 @@ C_FILES = 	SRC/main.c \
 			SRC/parsing/element/element_utils.c \
 			SRC/parsing/element/atoi_double.c
 O_FILES = $(C_FILES:%.c=build/%.o)
-C_FLAGS = -Wall -Werror -Wextra -Iinclude 
+C_FLAGS = -Wall -Werror -Wextra -Iinclude -g
 NAME = miniRT
 
 .PHONY: all clean fclean re 42libC
