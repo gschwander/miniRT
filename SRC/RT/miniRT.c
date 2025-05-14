@@ -6,13 +6,13 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/14 09:52:19 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:36:30 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-bool intersection(t_sphere sphere, t_ray ray, t_point *local_point, double *t)
+bool intersection_sphere(t_sphere sphere, t_ray ray, t_point *local_point, double *t)
 {
     double delta;
     double a;
@@ -39,6 +39,147 @@ bool intersection(t_sphere sphere, t_ray ray, t_point *local_point, double *t)
     return (true);
 }
 
+// bool intersection_cylinder(t_cylinder cy, t_ray ray, t_point *pt, double *t_out)
+// {
+//     // 1) Variables locales
+//     t_vec  CO = vec_minus(ray.origin, cy.origin);
+//     t_vec  V  = cy.direction;            // unitaire
+//     t_vec  D  = ray.direction;
+
+//     // 2) Projection sur le plan perpendiculaire à V
+//     //    a = |D - (D·V)V|^2
+//     t_vec  Dp = vec_minus(D, vec_mult(vec_scal(D, V), V));
+//     double a = vec_scal(Dp, Dp);
+
+//     //    b = 2 (D - (D·V)V) · (CO - (CO·V)V)
+//     t_vec  COp= vec_minus(CO, vec_mult(vec_scal(CO, V), V));
+//     double b = 2 * vec_scal(Dp, COp);
+
+//     //    c = |CO - (CO·V)V|^2 - (r)^2
+//     double r = cy.radius;
+//     double c = vec_scal(COp, COp) - r*r;
+
+//     // 3) Discriminant
+//     double delta = b*b - 4*a*c;
+//     if (delta < 0.0) return false;
+
+//     // 4) Solutions t0 < t1
+//     double sq = sqrt(delta);
+//     double t0 = (-b - sq) / (2*a);
+//     double t1 = (-b + sq) / (2*a);
+//     if (t1 < 0.0) return false;
+//     double t = (t0 > 0.0) ? t0 : t1;
+
+//     // 5) On doit vérifier que le point est dans la hauteur du cylindre
+//     t_vec  P = vec_plus(ray.origin, vec_mult(t, D));
+//     double proj = vec_scal(vec_minus(P, cy.origin), V);
+//     if (proj < 0.0 || proj > cy.height)
+//         return false;
+
+//     // 6) On remplit la structure locale
+//     pt->P = P;
+//     // Normale : projection du vecteur (P - origine) sur l’axe puis
+//     // N = normalize((P - origine) - proj*V)
+//     t_vec tmp = vec_minus(vec_minus(P, cy.origin), vec_mult(proj, V));
+//     pt->N = normalize(tmp);
+
+//     *t_out = t;
+//     return true;
+// }
+
+#define EPSILON 1e-6
+
+bool intersection_cylinder(t_cylinder cy, t_ray ray, t_point *pt, double *t_out)
+{
+    t_vec  O = ray.origin;
+    t_vec  D = ray.direction;
+    t_vec  C = cy.origin;
+    t_vec  V = cy.direction;              // unitaire
+    double r = cy.radius;
+    double h = cy.height;
+
+    // === 1) Intersection latérale (comme avant) ===
+    t_vec CO   = vec_minus(O, C);
+    t_vec Dp   = vec_minus(D, vec_mult(vec_scal(D, V), V));
+    t_vec COp  = vec_minus(CO, vec_mult(vec_scal(CO, V), V));
+    double a   = vec_scal(Dp, Dp);
+    double b   = 2 * vec_scal(Dp, COp);
+    double c   = vec_scal(COp, COp) - r*r;
+
+    double delta = b*b - 4*a*c;
+    double t_side = INFINITY;
+    t_vec  N_side = {0};
+
+    if (delta >= 0.0 && fabs(a) > EPSILON)
+    {
+        double sq = sqrt(delta);
+        double t0 = (-b - sq) / (2*a);
+        double t1 = (-b + sq) / (2*a);
+        // choisir le plus petit positif
+        if (t0 > EPSILON) t_side = t0;
+        else if (t1 > EPSILON) t_side = t1;
+
+        if (t_side < INFINITY)
+        {
+            // vérifier qu’on est dans la hauteur
+            t_vec P = vec_plus(O, vec_mult(t_side, D));
+            double proj = vec_scal(vec_minus(P, C), V);
+            if (proj < 0.0 || proj > h)
+                t_side = INFINITY;
+            else
+            {
+                // normale latérale
+                t_vec tmp = vec_minus(vec_minus(P, C), vec_mult(proj, V));
+                N_side = normalize(tmp);
+            }
+        }
+    }
+
+    // === 2) Intersection avec la base (plan C, normale = -V) ===
+    double t_base = INFINITY;
+    t_vec  N_base = vec_mult(-1.0, V);
+    double denom = vec_scal(D, V);
+    if (fabs(denom) > EPSILON) {
+        double t0 = vec_scal(vec_minus(C, O), V) / denom;
+        if (t0 > EPSILON) {
+            t_vec P0 = vec_plus(O, vec_mult(t0, D));
+            if (norm2(vec_minus(P0, C)) <= r*r)
+                t_base = t0;
+        }
+    }
+
+    // === 3) Intersection avec le sommet (plan C + h·V, normale = +V) ===
+    double t_top = INFINITY;
+    t_vec  Ct    = vec_plus(C, vec_mult(h, V));
+    t_vec  N_top = V;
+    if (fabs(denom) > EPSILON) {
+        double t1 = vec_scal(vec_minus(Ct, O), V) / denom;
+        if (t1 > EPSILON) {
+            t_vec P1 = vec_plus(O, vec_mult(t1, D));
+            if (norm2(vec_minus(P1, Ct)) <= r*r)
+                t_top = t1;
+        }
+    }
+
+    // === 4) Choisir la plus petite t > 0 parmi side, base, top ===
+    double t = t_side;
+    t_vec  N = N_side;
+
+    if (t_base < t) { t = t_base; N = N_base; }
+    if (t_top  < t) { t = t_top;  N = N_top;  }
+
+    if (t == INFINITY)
+        return false;
+
+    // === 5) Remplir le résultat ===
+    pt->P     = vec_plus(O, vec_mult(t, D));
+    pt->N     = N;
+    *t_out    = t;
+    return true;
+}
+
+
+
 bool intersections(t_rt *rt, t_ray ray, t_point *point, int *sphere_id)
 {
     int i;
@@ -51,7 +192,7 @@ bool intersections(t_rt *rt, t_ray ray, t_point *point, int *sphere_id)
     i = -1;
     while (++i < rt->scene.spheres_nb)
     {
-        has_inter[1] = intersection(rt->scene.spheres[i], ray, &local_point, &t);
+        has_inter[1] = intersection_sphere(rt->scene.spheres[i], ray, &local_point, &t);
         if (has_inter[1])
         {
             has_inter[0] = true;
@@ -63,6 +204,36 @@ bool intersections(t_rt *rt, t_ray ray, t_point *point, int *sphere_id)
             }
         }
     }
+	i = -1;
+	while (++i < rt->scene.cylinders_nb)
+	{
+		has_inter[1] = intersection_cylinder(rt->scene.cylinders[i], ray, &local_point, &t);
+		if (has_inter[1])
+		{
+			has_inter[0] = true;
+			if (t < rt->min_t)
+			{
+				rt->min_t = t;
+				*point = local_point;
+				*sphere_id = i;
+			}
+		}
+	}
+	// i = -1;
+	// while (++i < rt->scene.planes_nb)
+	// {
+	// 	has_inter[1] = intersection_plane(rt->scene.planes[i], ray, &local_point, &t);
+	// 	if (has_inter[1])
+	// 	{
+	// 		has_inter[0] = true;
+	// 		if (t < rt->min_t)
+	// 		{
+	// 			rt->min_t = t;
+	// 			*point = local_point;
+	// 			*sphere_id = i;
+	// 		}
+	// 	}
+	// }
     return (has_inter[0]);
 }
 
