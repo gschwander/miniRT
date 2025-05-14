@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/13 17:21:23 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/14 09:52:19 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,83 @@ t_vec cal_dir_ray(t_rt *rt)
     return (vec);
 }
 
+bool shadow(t_rt *rt, t_point *point)
+{
+    t_ray ray_light;
+    bool has_inter_light;
+    t_point point_light;
+    int sphere_id;
+    double d_light2;
+    
+    ray_light.origin = vec_plus(point->P, vec_mult(0.01, point->N));
+    ray_light.direction = normalize(vec_minus(rt->scene.light.origin, point->P));
+    has_inter_light = intersections(rt, ray_light, &point_light, &sphere_id);
+    d_light2 = norm2(vec_minus(rt->scene.light.origin, point->P));
+    if (has_inter_light && rt->min_t * rt->min_t < d_light2)
+		return (true);
+	return (false);
+}
+
+// void get_color(t_rt *rt, t_vec P, t_vec N, int sphere_id)
+// {
+//     double intensity_lum = 1000000000;
+//     t_vec intensity_pixel;
+//     intensity_pixel = (t_vec){0., 0., 0.};
+//     intensity_pixel = vec_mult(intensity_lum * fmax(0., vec_scal(normalize(vec_minus(rt->scene.light.origin, P)), N) / norm2(vec_minus(rt->scene.light.origin, P))), rt->scene.spheres[sphere_id].albedo);
+//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 0] = fmin(255., fmax(0., pow(intensity_pixel.x, 1 / 2.2)));
+//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 1] = fmin(255., fmax(0., pow(intensity_pixel.y, 1 / 2.2)));
+//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 2] = fmin(255., fmax(0., pow(intensity_pixel.z, 1 / 2.2)));
+// }
+
+// void get_color(t_rt *rt, t_vec P, t_vec N, int sphere_id)
+// {
+//     double intensity_lum = 1000000000;
+//     t_vec intensity_pixel;
+//     t_vec ambient;
+
+//     ambient = vec_mult(rt->scene.ambient_light.intensity, vec_m_vec(rt->scene.spheres[sphere_id].albedo, rt->scene.ambient_light.color));
+    
+//     intensity_pixel = (t_vec){0., 0., 0.};
+//     intensity_pixel = vec_mult(intensity_lum * fmax(0., vec_scal(normalize(vec_minus(rt->scene.light.origin, P)), N) / norm2(vec_minus(rt->scene.light.origin, P))), rt->scene.spheres[sphere_id].albedo);
+//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 0] = fmin(255., fmax(0., pow(intensity_pixel.x, 1 / 2.2)));
+//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 1] = fmin(255., fmax(0., pow(intensity_pixel.y, 1 / 2.2)));
+//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 2] = fmin(255., fmax(0., pow(intensity_pixel.z, 1 / 2.2)));
+// }
+
 void get_color(t_rt *rt, t_vec P, t_vec N, int sphere_id)
 {
-    double intensity_lum = 1000000000;
-    t_vec intensity_pixel;
-    intensity_pixel = (t_vec){0., 0., 0.};
-    intensity_pixel = vec_mult(intensity_lum * fmax(0., vec_scal(normalize(vec_minus(rt->scene.light.origin, P)), N) / norm2(vec_minus(rt->scene.light.origin, P))), rt->scene.spheres[sphere_id].albedo);
-    rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 0] = fmin(255., fmax(0., pow(intensity_pixel.x, 1 / 2.2)));
-    rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 1] = fmin(255., fmax(0., pow(intensity_pixel.y, 1 / 2.2)));
-    rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 2] = fmin(255., fmax(0., pow(intensity_pixel.z, 1 / 2.2)));
+    t_sphere s;
+	s = rt->scene.spheres[sphere_id];
+    // 1) composante ambiante (toujours présente, non affectée par l’ombre)
+    t_vec ambient = vec_mult(255 * rt->scene.ambient_light.intensity,
+                             vec_m_vec(s.albedo, rt->scene.ambient_light.color));
+
+    // 2) distance et direction de la lumière
+    t_vec Ldir = normalize(vec_minus(rt->scene.light.origin, P));
+    double   dist2 = norm2(vec_minus(rt->scene.light.origin, P));
+    double   diff_coeff = fmax(0., vec_scal(Ldir, N)) / dist2;
+    
+    // 3) composante diffuse
+    double intensity_lum = 1e4;
+    t_vec diffuse = vec_mult(intensity_lum * diff_coeff,
+                             vec_m_vec(s.albedo, rt->scene.light.color));
+
+    // 4) si l’objet est dans l’ombre, on ne garde que l’ambiant
+	t_vec color;
+	if (shadow(rt, &(t_point){ .P = P, .N = N }))
+		color = ambient;
+	else
+		color = vec_plus(ambient, vec_mult(255, diffuse));
+	
+    // 5) gamma-correction et clamp
+    color.x = pow(color.x, 1/2.2);
+    color.y = pow(color.y, 1/2.2);
+    color.z = pow(color.z, 1/2.2);
+	// printf("color: %f %f %f\n", color.x, color.y, color.z);
+    int idx = ((rt->H - rt->i - 1) * rt->W + rt->j) * 3;
+    rt->image[idx + 0] = (unsigned char)(fmin(255., fmax(0., color.x)));
+    rt->image[idx + 1] = (unsigned char)(fmin(255., fmax(0., color.y)));
+    rt->image[idx + 2] = (unsigned char)(fmin(255., fmax(0., color.z)));
 }
 
 void color_nul(t_rt *rt)
@@ -94,22 +162,6 @@ void color_nul(t_rt *rt)
     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 2] = 0;
 }
 
-bool shadow(t_rt *rt, t_point *point)
-{
-    t_ray ray_light;
-    bool has_inter_light;
-    t_point point_light;
-    int sphere_id;
-    double d_light2;
-
-    ray_light.origin = vec_plus(point->P, vec_mult(0.01, point->N));
-    ray_light.direction = normalize(vec_minus(rt->scene.light.origin, point->P));
-    has_inter_light = intersections(rt, ray_light, &point_light, &sphere_id);
-    d_light2 = norm2(vec_minus(rt->scene.light.origin, point->P));
-    if (has_inter_light && rt->min_t * rt->min_t < d_light2)
-        return (true);
-    return (false);
-}
 
 unsigned char * render(t_rt *rt)
 {
@@ -129,11 +181,8 @@ unsigned char * render(t_rt *rt)
             // ray.origin = (t_vec){0.,0.,0.};
             ray.direction = normalize(cal_dir_ray(rt));
             if (intersections(rt, ray, &point, &sphere_id))
-            {
-                if (shadow(rt, &point))
-                    color_nul(rt);
-                else    
-                    get_color(rt, point.P, point.N, sphere_id);
+            {  
+               get_color(rt, point.P, point.N, sphere_id);
             }
             else
                 color_nul(rt);
