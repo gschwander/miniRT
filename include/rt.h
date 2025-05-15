@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/05/15 09:44:33 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/15 11:38:49 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_elem {
     t_vec height;
     // integrer la bonne fonction d'intersection dans la structure
     double (*intersection)(/*bla bla bla*/);
+    double (*print)(t_elem);
 } t_elem;
 
 typedef struct s_scene {
