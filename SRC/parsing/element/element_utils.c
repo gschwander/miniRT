@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 09:38:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 16:18:37 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:52:29 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,65 +152,14 @@ void	print_scene(t_rt *rt)
 	int	i;
 
 	i = 0;
-	while (i < rt->scene.spheres_nb)
+	while (i < rt->scene.elem_nb)
 	{
-		printf("sp ");
-		printf("%f,%f,%f ", rt->scene.spheres[i].origin.x,
-			rt->scene.spheres[i].origin.y, rt->scene.spheres[i].origin.z);
-		printf("%f ", rt->scene.spheres[i].radius);
-		printf("%f,%f,%f", rt->scene.spheres[i].albedo.x,
-			rt->scene.spheres[i].albedo.y, rt->scene.spheres[i].albedo.z);
-		printf("\n");
+		if (rt->scene.elem[i].id == 0)
+			break ;
+		if (rt->scene.elem[i].print)
+			rt->scene.elem[i].print(rt->scene.elem[i]);
 		i++;
 	}
-	i = 0;
-	while (i < rt->scene.planes_nb)
-	{
-		printf("pl ");
-		printf("%f,%f,%f ", rt->scene.planes[i].origin.x,
-			rt->scene.planes[i].origin.y, rt->scene.planes[i].origin.z);
-		printf("%f,%f,%f ", rt->scene.planes[i].normal.x,
-			rt->scene.planes[i].normal.y, rt->scene.planes[i].normal.z);
-		printf("%f,%f,%f", rt->scene.planes[i].albedo.x,
-			rt->scene.planes[i].albedo.y, rt->scene.planes[i].albedo.z);
-		printf("\n");
-		i++;
-	}
-	i = 0;
-	while (i < rt->scene.cylinders_nb)
-	{
-		printf("cy ");
-		printf("%f,%f,%f ", rt->scene.cylinders[i].origin.x,
-			rt->scene.cylinders[i].origin.y, rt->scene.cylinders[i].origin.z);
-		printf("%f,%f,%f ", rt->scene.cylinders[i].direction.x,
-			rt->scene.cylinders[i].direction.y,
-			rt->scene.cylinders[i].direction.z);
-		printf("%f ", rt->scene.cylinders[i].radius);
-		printf("%f ", rt->scene.cylinders[i].height);
-		printf("%f,%f,%f ", rt->scene.cylinders[i].albedo.x,
-			rt->scene.cylinders[i].albedo.y, rt->scene.cylinders[i].albedo.z);
-		printf("\n");
-		i++;
-	}
-	printf("L ");
-	printf("%f,%f,%f ", rt->scene.light.origin.x, rt->scene.light.origin.y,
-		rt->scene.light.origin.z);
-	printf("%f ", rt->scene.light.intensity);
-	printf("%f,%f,%f ", rt->scene.light.color.x, rt->scene.light.color.y,
-		rt->scene.light.color.z);
-	printf("\n");
-	printf("A ");
-	printf("%f,%f,%f ", rt->scene.ambient_light.color.x,
-		rt->scene.ambient_light.color.y, rt->scene.ambient_light.color.z);
-	printf("%f ", rt->scene.ambient_light.intensity);
-	printf("\n");
-	printf("C ");
-	printf("%f,%f,%f", rt->scene.camera.origin.x, rt->scene.camera.origin.y,
-		rt->scene.camera.origin.z);
-	printf("%f,%f,%f ", rt->scene.camera.direction.x,
-		rt->scene.camera.direction.y, rt->scene.camera.direction.z);
-	printf("%f ", rt->scene.camera.fov);
-	printf("\n");
 }
 
 // int find_elem_id(void *elem)

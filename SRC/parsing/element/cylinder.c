@@ -6,63 +6,46 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:35:47 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 14:10:02 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:25:59 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static int	find_cylinder_id(t_cylinder *cylinder)
+void print_cylinder(t_elem elem)
 {
-	int	i;
-
-	i = 0;
-	if (cylinder[0].id == 0)
-		return (i);
-	while (1)
-	{
-		if (cylinder[i].id == 0)
-			return (i);
-		i++;
-	}
-	return (i);
+	printf("Cylinder %d:\n", elem.id);
+	printf("  Origin: (%f, %f, %f)\n", elem.origin.x, elem.origin.y, elem.origin.z);
+	printf("  Direction: (%f, %f, %f)\n", elem.direction.x, elem.direction.y, elem.direction.z);
+	printf("  Radius: %f\n", elem.radius);
+	printf("  Height: %f\n", elem.height);
+	printf("  Albedo: (%f, %f, %f)\n", elem.albedo.x, elem.albedo.y, elem.albedo.z);
 }
 
-// int	parse_cylinder(t_rt *rt, char *line)
-void	parse_cylinder(t_rt *rt, char *line)
+void parse_cylinder(t_rt *rt, char *line)
 {
-	char	**tab;
-	int		i;
-
-	i = find_cylinder_id(rt->scene.cylinders);
-	rt->scene.cylinders[i].id = i + 1;
-	// tab = ft_split(line, ' ');
-	// if (!tab)
-	// 	return (1);
-    tab = rt_ft_split(rt, line, ' ');
-	if (tab[1] && tab[2] && tab[3] && tab[4] && tab[5])
+	char **tab;
+	int i;
+	
+	i = find_elem_id(rt->scene.elem);
+	rt->scene.elem[i].id = i + 1;
+	tab = rt_ft_split(rt, line, ' ');
+	if (tab[1] && tab[2] && tab[3] && tab[4])
 	{
-		rt->scene.cylinders[i].origin = parse_vec(rt, tab[1]);
-		// if (!rt->scene.cylinders[i].origin)
-		// 	return (free_tab_char(tab), 1);
-		rt->scene.cylinders[i].direction = parse_vec(rt, tab[2]);
-		// if (!rt->scene.cylinders[i].direction)
-		// 	return (free_tab_char(tab), 1);
-		rt->scene.cylinders[i].radius = ft_atoi_double(tab[3]);
-		if (rt->scene.cylinders[i].radius < 0)
-            exit_error(rt, "Error: Invalid radius for cylinders");
-			// return (free_tab_char(tab), ft_putstr_fd("Error: Invalid radius for cylinders\n", 2), 1);
-		rt->scene.cylinders[i].height = ft_atoi_double(tab[4]);
-		if (rt->scene.cylinders[i].height < 0)
-			// return (free_tab_char(tab), ft_putstr_fd("Error: Invalid height for cylinders\n", 2), 1);
-            exit_error(rt, "Error: Invalid height for cylinders");
-		rt->scene.cylinders[i].albedo = parse_color(rt, tab[5]);
-		// if (!rt->scene.cylinders[i].albedo)
-		// 	return (free_tab_char(tab), 1);
-		// free_tab_char(tab);
-		// return (0);
-        return;
+		rt->scene.elem[i].origin = parse_vec(rt, tab[1]);
+		rt->scene.elem[i].direction = parse_vec(rt, tab[2]);
+		if (rt->scene.elem[i].direction.x == 0 && rt->scene.elem[i].direction.y == 0 && rt->scene.elem[i].direction.z == 0)
+			exit_error(rt, "Error: Invalid direction for cylinder");
+		rt->scene.elem[i].radius = ft_atoi_double(tab[3]);
+		if (rt->scene.elem[i].radius < 0)
+			exit_error(rt, "Error: Invalid radius for cylinder");
+		rt->scene.elem[i].height = ft_atoi_double(tab[4]);
+		if (rt->scene.elem[i].height < 0)
+			exit_error(rt, "Error: Invalid height for cylinder");
+		rt->scene.elem[i].albedo = vec_mult(1.0 / 255, parse_color(rt, tab[5]));
+		rt->scene.elem[i].intersection = &cylinder_intersection;
+		rt->scene.elem[i].print = &print_cylinder;
+		return;
 	}
-	// return (free_tab_char(tab), ft_putstr_fd("Error: Invalid number of arguments for cylinders\n", 2), 1);
-    exit_error(rt, "Error: Invalid number of arguments for cylinders\n");
+	exit_error(rt, "Error: Invalid number of arguments for cylinder");
 }

@@ -6,14 +6,33 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/14 12:23:45 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:49:02 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #define EPSILON 1e-6
 
-bool intersection_sphere(t_sphere sphere, t_ray ray, t_point *local_point, double *t)
+bool cylinder_intersection(t_elem elem, t_ray ray, t_point *local_point,
+    double *t)
+{
+    (void) elem;
+    (void) ray;
+    (void) local_point;
+    (void) t;
+    return (true);
+}
+
+bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
+{
+    (void) elem;
+    (void) ray;
+    (void) local_point;
+    (void) t;
+    return (true);
+}
+
+bool sphere_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
 {
     double delta;
     double a;
@@ -22,8 +41,8 @@ bool intersection_sphere(t_sphere sphere, t_ray ray, t_point *local_point, doubl
     double t_tab[2];
 
     a = 1;
-    b = 2 * vec_scal(ray.direction, vec_minus(ray.origin, sphere.origin));
-    c = norm2(vec_minus(ray.origin, sphere.origin)) - (sphere.radius * sphere.radius);
+    b = 2 * vec_scal(ray.direction, vec_minus(ray.origin, elem.origin));
+    c = norm2(vec_minus(ray.origin, elem.origin)) - (elem.radius * elem.radius);
     delta = b * b - 4 * a * c;
     if (delta < 0)
         return (false);
@@ -36,129 +55,9 @@ bool intersection_sphere(t_sphere sphere, t_ray ray, t_point *local_point, doubl
     else
         *t = t_tab[0];
     local_point->P = vec_plus(ray.origin, vec_mult(*t, ray.direction));
-    local_point->N = normalize(vec_minus(local_point->P, sphere.origin));
+    local_point->N = normalize(vec_minus(local_point->P, elem.origin));
     return (true);
 }
-
-#include <math.h>
-#define EPSILON 1e-6
-
-bool intersection_cylinder(t_cylinder cy, t_ray ray, t_point *pt, double *t_out)
-{
-    t_vec O = ray.origin;
-    t_vec D = ray.direction;
-    t_vec C = cy.origin;
-    t_vec V = cy.direction;                  // unitaire
-    double r    = cy.radius;
-    double h2   = cy.height   * 0.5;
-    double denom = vec_scal(D, V);
-
-    double t_min = INFINITY;
-    t_vec  N_min = (t_vec){0., 0., 0.};
-
-    // === 1) Surface latérale ===
-    {
-        t_vec CO   = vec_minus(O, C);
-        t_vec Dp   = vec_minus(D, vec_mult(vec_scal(D, V), V));
-        t_vec COp  = vec_minus(CO, vec_mult(vec_scal(CO, V), V));
-        double a   = vec_scal(Dp, Dp);
-        double b   = 2.0 * vec_scal(Dp, COp);
-        double c   = vec_scal(COp, COp) - r * r;
-        double delta = b * b - 4.0 * a * c;
-
-        if (delta >= 0.0 && fabs(a) > EPSILON)
-        {
-            double sq = sqrt(delta);
-            double t0 = (-b - sq) / (2.0 * a);
-            double t1 = (-b + sq) / (2.0 * a);
-
-            /* premier candidat t0 */
-            if (t0 > EPSILON)
-            {
-                t_vec P0 = vec_plus(O, vec_mult(t0, D));
-                double proj0 = vec_scal(vec_minus(P0, C), V);
-                if (proj0 >= -h2 && proj0 <= h2)
-                {
-                    if (t0 < t_min)
-                    {
-                        t_min = t0;
-                        t_vec tmp = vec_minus(
-                            vec_minus(P0, C),
-                            vec_mult(proj0, V)
-                        );
-                        N_min = normalize(tmp);
-                    }
-                }
-            }
-
-            /* deuxième candidat t1 */
-            if (t1 > EPSILON)
-            {
-                t_vec P1 = vec_plus(O, vec_mult(t1, D));
-                double proj1 = vec_scal(vec_minus(P1, C), V);
-                if (proj1 >= -h2 && proj1 <= h2)
-                {
-                    if (t1 < t_min)
-                    {
-                        t_min = t1;
-                        t_vec tmp = vec_minus(
-                            vec_minus(P1, C),
-                            vec_mult(proj1, V)
-                        );
-                        N_min = normalize(tmp);
-                    }
-                }
-            }
-        }
-    }
-
-    // === 2) Base (plan C - h2·V) ===
-    if (fabs(denom) > EPSILON)
-    {
-        t_vec Cb = vec_minus(C, vec_mult(h2, V));
-        double tb = vec_scal(vec_minus(Cb, O), V) / denom;
-        if (tb > EPSILON && tb < t_min)
-        {
-            t_vec P2 = vec_plus(O, vec_mult(tb, D));
-            t_vec d2 = vec_minus(P2, Cb);
-            if (vec_scal(d2, d2) <= r * r)
-            {
-                t_min = tb;
-                N_min = vec_mult(-1.0, V);
-            }
-        }
-    }
-
-    // === 3) Sommet (plan C + h2·V) ===
-    if (fabs(denom) > EPSILON)
-    {
-        t_vec Ct = vec_plus(C, vec_mult(h2, V));
-        double tt = vec_scal(vec_minus(Ct, O), V) / denom;
-        if (tt > EPSILON && tt < t_min)
-        {
-            t_vec P3 = vec_plus(O, vec_mult(tt, D));
-            t_vec d3 = vec_minus(P3, Ct);
-			if (vec_scal(d3, d3) <= r * r)
-			{
-				t_min = tt;
-				N_min = V;
-			}
-		}
-    }
-
-    if (t_min == INFINITY)
-        return false;
-
-    /* renvoyer le hit le plus proche */
-    pt->P    = vec_plus(O, vec_mult(t_min, D));
-    pt->N    = N_min;
-    *t_out   = t_min;
-    return true;
-}
-
-
-
-
 
 bool intersections(t_rt *rt, t_ray ray, t_point *point, int *sphere_id)
 {
@@ -170,9 +69,10 @@ bool intersections(t_rt *rt, t_ray ray, t_point *point, int *sphere_id)
     rt->min_t = 1E99;
     has_inter[0] = false;
     i = -1;
-    while (++i < rt->scene.spheres_nb)
+    while (++i < rt->scene.elem_nb)
     {
-        has_inter[1] = intersection_sphere(rt->scene.spheres[i], ray, &local_point, &t);
+        has_inter[1] = rt->scene.elem[i].intersection(rt->scene.elem[i],
+            ray, &local_point, &t);
         if (has_inter[1])
         {
             has_inter[0] = true;
@@ -184,36 +84,6 @@ bool intersections(t_rt *rt, t_ray ray, t_point *point, int *sphere_id)
             }
         }
     }
-	i = -1;
-	while (++i < rt->scene.cylinders_nb)
-	{
-		has_inter[1] = intersection_cylinder(rt->scene.cylinders[i], ray, &local_point, &t);
-		if (has_inter[1])
-		{
-			has_inter[0] = true;
-			if (t < rt->min_t)
-			{
-				rt->min_t = t;
-				*point = local_point;
-				*sphere_id = i;
-			}
-		}
-	}
-	// i = -1;
-	// while (++i < rt->scene.planes_nb)
-	// {
-	// 	has_inter[1] = intersection_plane(rt->scene.planes[i], ray, &local_point, &t);
-	// 	if (has_inter[1])
-	// 	{
-	// 		has_inter[0] = true;
-	// 		if (t < rt->min_t)
-	// 		{
-	// 			rt->min_t = t;
-	// 			*point = local_point;
-	// 			*sphere_id = i;
-	// 		}
-	// 	}
-	// }
     return (has_inter[0]);
 }
 
@@ -244,36 +114,10 @@ bool shadow(t_rt *rt, t_point *point)
 	return (false);
 }
 
-// void get_color(t_rt *rt, t_vec P, t_vec N, int sphere_id)
-// {
-//     double intensity_lum = 1000000000;
-//     t_vec intensity_pixel;
-//     intensity_pixel = (t_vec){0., 0., 0.};
-//     intensity_pixel = vec_mult(intensity_lum * fmax(0., vec_scal(normalize(vec_minus(rt->scene.light.origin, P)), N) / norm2(vec_minus(rt->scene.light.origin, P))), rt->scene.spheres[sphere_id].albedo);
-//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 0] = fmin(255., fmax(0., pow(intensity_pixel.x, 1 / 2.2)));
-//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 1] = fmin(255., fmax(0., pow(intensity_pixel.y, 1 / 2.2)));
-//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 2] = fmin(255., fmax(0., pow(intensity_pixel.z, 1 / 2.2)));
-// }
-
-// void get_color(t_rt *rt, t_vec P, t_vec N, int sphere_id)
-// {
-//     double intensity_lum = 1000000000;
-//     t_vec intensity_pixel;
-//     t_vec ambient;
-
-//     ambient = vec_mult(rt->scene.ambient_light.intensity, vec_m_vec(rt->scene.spheres[sphere_id].albedo, rt->scene.ambient_light.color));
-    
-//     intensity_pixel = (t_vec){0., 0., 0.};
-//     intensity_pixel = vec_mult(intensity_lum * fmax(0., vec_scal(normalize(vec_minus(rt->scene.light.origin, P)), N) / norm2(vec_minus(rt->scene.light.origin, P))), rt->scene.spheres[sphere_id].albedo);
-//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 0] = fmin(255., fmax(0., pow(intensity_pixel.x, 1 / 2.2)));
-//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 1] = fmin(255., fmax(0., pow(intensity_pixel.y, 1 / 2.2)));
-//     rt->image[((rt->H - rt->i - 1) * rt->W + rt->j) * 3 + 2] = fmin(255., fmax(0., pow(intensity_pixel.z, 1 / 2.2)));
-// }
-
-void get_color(t_rt *rt, t_vec P, t_vec N, int sphere_id)
+void get_color(t_rt *rt, t_vec P, t_vec N, int elem_id)
 {
-    t_sphere s;
-	s = rt->scene.spheres[sphere_id];
+    t_elem s;
+	s = rt->scene.elem[elem_id];
     // 1) composante ambiante (toujours présente, non affectée par l’ombre)
     t_vec ambient = vec_mult(255 * rt->scene.ambient_light.intensity,
                              vec_m_vec(s.albedo, rt->scene.ambient_light.color));
@@ -318,9 +162,9 @@ unsigned char * render(t_rt *rt)
 {
     t_ray ray;
     t_point point;
-    int sphere_id;
+    int elem_id;
 
-    sphere_id = 0;
+    elem_id = 0;
     rt->image = wrap_malloc(rt, sizeof(unsigned char) * rt->W * rt->H * 3);
     rt->i = -1;
     while (++rt->i < rt->H)
@@ -331,9 +175,9 @@ unsigned char * render(t_rt *rt)
             ray.origin = rt->scene.camera.origin;
             // ray.origin = (t_vec){0.,0.,0.};
             ray.direction = normalize(cal_dir_ray(rt));
-            if (intersections(rt, ray, &point, &sphere_id))
+            if (intersections(rt, ray, &point, &elem_id))
             {  
-               get_color(rt, point.P, point.N, sphere_id);
+               get_color(rt, point.P, point.N, elem_id);
             }
             else
                 color_nul(rt);

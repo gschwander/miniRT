@@ -6,16 +6,12 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/05/15 11:38:49 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/15 13:03:11 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RT_H
 # define RT_H
-# define PCG_DEFAULT_MULTIPLIER_64  6364136223846793005ULL
-# define pcg32_random_r                  pcg_setseq_64_xsh_rr_32_random_r
-# define pcg32_srandom_r                 pcg_setseq_64_srandom_r
-# define pcg32_advance_r                 pcg_setseq_64_advance_r
 
 # include <stdint.h>
 # include <stdbool.h>
@@ -55,40 +51,16 @@ typedef struct s_camera {
     double fov;
 } t_camera;
 
-typedef struct s_sphere {
-    int id;
-    t_vec origin;
-    double radius;
-    t_vec albedo;
-}t_sphere;
-
-typedef struct s_plane {
-    int id;
-    t_vec origin;
-    t_vec normal;
-    t_vec albedo;
-} t_plane;
-
-typedef struct s_cylinder {
-    int id;
-    t_vec origin;
-    t_vec direction;
-    double radius;
-    double height;
-    t_vec albedo;
-} t_cylinder;
-
 typedef struct s_elem {
     int id;
     t_vec origin;
-    double rayon;
-    t_vec albego;
+    double radius;
+    t_vec albedo;
     t_vec normal;
     t_vec direction;
-    t_vec height;
-    // integrer la bonne fonction d'intersection dans la structure
-    double (*intersection)(/*bla bla bla*/);
-    double (*print)(t_elem);
+    double height;
+    bool (*intersection)(struct s_elem, t_ray, t_point *, double *);
+    void (*print)(struct s_elem);
 } t_elem;
 
 typedef struct s_scene {
@@ -96,26 +68,11 @@ typedef struct s_scene {
     t_ambient_light ambient_light;
     t_camera camera;
 
-    t_elem *element;
+    int elem_nb;
+    t_elem *elem;
 } t_scene; 
 
-typedef struct s_mt_state
-{
-    uint32_t state_array[624];         // the array for the state vector 
-    int state_index;                 // index into state vector array, 0 <= state_index <= n-1   always
-    double max_range;
-} t_mt_state;
-
-typedef struct pcg_state_setseq_64      t_pcg32_random;
-
-struct pcg_state_setseq_64 {
-    uint64_t state;
-    uint64_t inc;
-};
-
 typedef struct s_rt {
-    t_mt_state state;
-    t_pcg32_random rng;
     int W;
     int H;
     int i;
@@ -151,6 +108,9 @@ t_link_list *init_alloc(t_link_list **list);
 
 // miniRT.c
 unsigned char * render (t_rt * rt);
+bool sphere_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t);
+bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t);
+bool cylinder_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t);
 
 // bmp.c
 void save_img(t_rt * rt, const unsigned char * pixels, int W, int H); // rgb pixel
@@ -165,16 +125,7 @@ char	*rt_ft_substr(t_rt *rt, char const *s, unsigned int start, size_t len);
 // rt_ft_split.c
 char	**rt_ft_split(t_rt *rt, char const *s, char c);
 
-// rt_random.c
-void initialize_state(t_mt_state* state, uint32_t seed);
-uint32_t random_uint32(t_mt_state* state);
-double uniform_uint32(t_mt_state* state);
-
-// entropy.c
-bool entropy_getbytes(void* dest, size_t size);
-uint32_t pcg_setseq_64_xsh_rr_32_random_r(struct pcg_state_setseq_64* rng);
-void pcg_setseq_64_srandom_r(struct pcg_state_setseq_64* rng, uint64_t initstate, uint64_t initseq);
-void pcg_setseq_64_advance_r(struct pcg_state_setseq_64* rng, uint64_t delta);
-double double_rng(t_pcg32_random * rng);
+// find_elem_id.c
+int find_elem_id(t_elem *elem);
 
 #endif
