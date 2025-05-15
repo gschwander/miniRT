@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/05/13 16:14:41 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:41:24 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,24 @@ typedef struct s_cylinder {
     t_vec albedo;
 } t_cylinder;
 
+typedef struct s_elem {
+    int id;
+    t_vec origin;
+    double rayon;
+    t_vec albego;
+    t_vec normal;
+    t_vec direction;
+    t_vec height;
+    // integrer la bonne fonction d'intersection dans la structure
+    double intersection()
+}
+
 typedef struct s_scene {
     t_light light;    
     t_ambient_light ambient_light;
     t_camera camera;
 
-    int spheres_nb;
-    t_sphere * spheres;
-
-    int planes_nb;
-    t_plane * planes;
-
-    int cylinders_nb;
-    t_cylinder * cylinders;
-
-    // int light_nb;
-    // t_vec * light;
-    // double * light_intensity;
-
+    t_elem *element;
 } t_scene; 
 
 typedef struct s_mt_state
