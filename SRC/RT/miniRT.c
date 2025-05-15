@@ -6,11 +6,12 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/14 10:36:30 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:23:45 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#define EPSILON 1e-6
 
 bool intersection_sphere(t_sphere sphere, t_ray ray, t_point *local_point, double *t)
 {
@@ -39,144 +40,123 @@ bool intersection_sphere(t_sphere sphere, t_ray ray, t_point *local_point, doubl
     return (true);
 }
 
-// bool intersection_cylinder(t_cylinder cy, t_ray ray, t_point *pt, double *t_out)
-// {
-//     // 1) Variables locales
-//     t_vec  CO = vec_minus(ray.origin, cy.origin);
-//     t_vec  V  = cy.direction;            // unitaire
-//     t_vec  D  = ray.direction;
-
-//     // 2) Projection sur le plan perpendiculaire à V
-//     //    a = |D - (D·V)V|^2
-//     t_vec  Dp = vec_minus(D, vec_mult(vec_scal(D, V), V));
-//     double a = vec_scal(Dp, Dp);
-
-//     //    b = 2 (D - (D·V)V) · (CO - (CO·V)V)
-//     t_vec  COp= vec_minus(CO, vec_mult(vec_scal(CO, V), V));
-//     double b = 2 * vec_scal(Dp, COp);
-
-//     //    c = |CO - (CO·V)V|^2 - (r)^2
-//     double r = cy.radius;
-//     double c = vec_scal(COp, COp) - r*r;
-
-//     // 3) Discriminant
-//     double delta = b*b - 4*a*c;
-//     if (delta < 0.0) return false;
-
-//     // 4) Solutions t0 < t1
-//     double sq = sqrt(delta);
-//     double t0 = (-b - sq) / (2*a);
-//     double t1 = (-b + sq) / (2*a);
-//     if (t1 < 0.0) return false;
-//     double t = (t0 > 0.0) ? t0 : t1;
-
-//     // 5) On doit vérifier que le point est dans la hauteur du cylindre
-//     t_vec  P = vec_plus(ray.origin, vec_mult(t, D));
-//     double proj = vec_scal(vec_minus(P, cy.origin), V);
-//     if (proj < 0.0 || proj > cy.height)
-//         return false;
-
-//     // 6) On remplit la structure locale
-//     pt->P = P;
-//     // Normale : projection du vecteur (P - origine) sur l’axe puis
-//     // N = normalize((P - origine) - proj*V)
-//     t_vec tmp = vec_minus(vec_minus(P, cy.origin), vec_mult(proj, V));
-//     pt->N = normalize(tmp);
-
-//     *t_out = t;
-//     return true;
-// }
-
+#include <math.h>
 #define EPSILON 1e-6
 
 bool intersection_cylinder(t_cylinder cy, t_ray ray, t_point *pt, double *t_out)
 {
-    t_vec  O = ray.origin;
-    t_vec  D = ray.direction;
-    t_vec  C = cy.origin;
-    t_vec  V = cy.direction;              // unitaire
-    double r = cy.radius;
-    double h = cy.height;
+    t_vec O = ray.origin;
+    t_vec D = ray.direction;
+    t_vec C = cy.origin;
+    t_vec V = cy.direction;                  // unitaire
+    double r    = cy.radius;
+    double h2   = cy.height   * 0.5;
+    double denom = vec_scal(D, V);
 
-    // === 1) Intersection latérale (comme avant) ===
-    t_vec CO   = vec_minus(O, C);
-    t_vec Dp   = vec_minus(D, vec_mult(vec_scal(D, V), V));
-    t_vec COp  = vec_minus(CO, vec_mult(vec_scal(CO, V), V));
-    double a   = vec_scal(Dp, Dp);
-    double b   = 2 * vec_scal(Dp, COp);
-    double c   = vec_scal(COp, COp) - r*r;
+    double t_min = INFINITY;
+    t_vec  N_min = (t_vec){0., 0., 0.};
 
-    double delta = b*b - 4*a*c;
-    double t_side = INFINITY;
-    t_vec  N_side = {0};
-
-    if (delta >= 0.0 && fabs(a) > EPSILON)
+    // === 1) Surface latérale ===
     {
-        double sq = sqrt(delta);
-        double t0 = (-b - sq) / (2*a);
-        double t1 = (-b + sq) / (2*a);
-        // choisir le plus petit positif
-        if (t0 > EPSILON) t_side = t0;
-        else if (t1 > EPSILON) t_side = t1;
+        t_vec CO   = vec_minus(O, C);
+        t_vec Dp   = vec_minus(D, vec_mult(vec_scal(D, V), V));
+        t_vec COp  = vec_minus(CO, vec_mult(vec_scal(CO, V), V));
+        double a   = vec_scal(Dp, Dp);
+        double b   = 2.0 * vec_scal(Dp, COp);
+        double c   = vec_scal(COp, COp) - r * r;
+        double delta = b * b - 4.0 * a * c;
 
-        if (t_side < INFINITY)
+        if (delta >= 0.0 && fabs(a) > EPSILON)
         {
-            // vérifier qu’on est dans la hauteur
-            t_vec P = vec_plus(O, vec_mult(t_side, D));
-            double proj = vec_scal(vec_minus(P, C), V);
-            if (proj < 0.0 || proj > h)
-                t_side = INFINITY;
-            else
+            double sq = sqrt(delta);
+            double t0 = (-b - sq) / (2.0 * a);
+            double t1 = (-b + sq) / (2.0 * a);
+
+            /* premier candidat t0 */
+            if (t0 > EPSILON)
             {
-                // normale latérale
-                t_vec tmp = vec_minus(vec_minus(P, C), vec_mult(proj, V));
-                N_side = normalize(tmp);
+                t_vec P0 = vec_plus(O, vec_mult(t0, D));
+                double proj0 = vec_scal(vec_minus(P0, C), V);
+                if (proj0 >= -h2 && proj0 <= h2)
+                {
+                    if (t0 < t_min)
+                    {
+                        t_min = t0;
+                        t_vec tmp = vec_minus(
+                            vec_minus(P0, C),
+                            vec_mult(proj0, V)
+                        );
+                        N_min = normalize(tmp);
+                    }
+                }
+            }
+
+            /* deuxième candidat t1 */
+            if (t1 > EPSILON)
+            {
+                t_vec P1 = vec_plus(O, vec_mult(t1, D));
+                double proj1 = vec_scal(vec_minus(P1, C), V);
+                if (proj1 >= -h2 && proj1 <= h2)
+                {
+                    if (t1 < t_min)
+                    {
+                        t_min = t1;
+                        t_vec tmp = vec_minus(
+                            vec_minus(P1, C),
+                            vec_mult(proj1, V)
+                        );
+                        N_min = normalize(tmp);
+                    }
+                }
             }
         }
     }
 
-    // === 2) Intersection avec la base (plan C, normale = -V) ===
-    double t_base = INFINITY;
-    t_vec  N_base = vec_mult(-1.0, V);
-    double denom = vec_scal(D, V);
-    if (fabs(denom) > EPSILON) {
-        double t0 = vec_scal(vec_minus(C, O), V) / denom;
-        if (t0 > EPSILON) {
-            t_vec P0 = vec_plus(O, vec_mult(t0, D));
-            if (norm2(vec_minus(P0, C)) <= r*r)
-                t_base = t0;
+    // === 2) Base (plan C - h2·V) ===
+    if (fabs(denom) > EPSILON)
+    {
+        t_vec Cb = vec_minus(C, vec_mult(h2, V));
+        double tb = vec_scal(vec_minus(Cb, O), V) / denom;
+        if (tb > EPSILON && tb < t_min)
+        {
+            t_vec P2 = vec_plus(O, vec_mult(tb, D));
+            t_vec d2 = vec_minus(P2, Cb);
+            if (vec_scal(d2, d2) <= r * r)
+            {
+                t_min = tb;
+                N_min = vec_mult(-1.0, V);
+            }
         }
     }
 
-    // === 3) Intersection avec le sommet (plan C + h·V, normale = +V) ===
-    double t_top = INFINITY;
-    t_vec  Ct    = vec_plus(C, vec_mult(h, V));
-    t_vec  N_top = V;
-    if (fabs(denom) > EPSILON) {
-        double t1 = vec_scal(vec_minus(Ct, O), V) / denom;
-        if (t1 > EPSILON) {
-            t_vec P1 = vec_plus(O, vec_mult(t1, D));
-            if (norm2(vec_minus(P1, Ct)) <= r*r)
-                t_top = t1;
-        }
+    // === 3) Sommet (plan C + h2·V) ===
+    if (fabs(denom) > EPSILON)
+    {
+        t_vec Ct = vec_plus(C, vec_mult(h2, V));
+        double tt = vec_scal(vec_minus(Ct, O), V) / denom;
+        if (tt > EPSILON && tt < t_min)
+        {
+            t_vec P3 = vec_plus(O, vec_mult(tt, D));
+            t_vec d3 = vec_minus(P3, Ct);
+			if (vec_scal(d3, d3) <= r * r)
+			{
+				t_min = tt;
+				N_min = V;
+			}
+		}
     }
 
-    // === 4) Choisir la plus petite t > 0 parmi side, base, top ===
-    double t = t_side;
-    t_vec  N = N_side;
-
-    if (t_base < t) { t = t_base; N = N_base; }
-    if (t_top  < t) { t = t_top;  N = N_top;  }
-
-    if (t == INFINITY)
+    if (t_min == INFINITY)
         return false;
 
-    // === 5) Remplir le résultat ===
-    pt->P     = vec_plus(O, vec_mult(t, D));
-    pt->N     = N;
-    *t_out    = t;
+    /* renvoyer le hit le plus proche */
+    pt->P    = vec_plus(O, vec_mult(t_min, D));
+    pt->N    = N_min;
+    *t_out   = t_min;
     return true;
 }
+
+
 
 
 
@@ -361,3 +341,7 @@ unsigned char * render(t_rt *rt)
     }
     return (rt->image);
 }
+
+
+// sp -20,0,-30 20 255,0,0
+// sp 20,0,-55 20 255,0,0
