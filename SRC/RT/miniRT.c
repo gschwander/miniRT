@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/16 07:33:12 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:16:50 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,28 @@ bool cylinder_intersection(t_elem elem, t_ray ray, t_point *local_point,
 
 bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
 {
-    (void) elem;
-    (void) ray;
-    (void) local_point;
-    (void) t;
-    return (false);
+    double denom;
+    t_vec CO;
+
+    // trouver pourquoi dans certain cas ray.origin n'est pas definie
+    
+    printf("ray.origin: %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
+    printf("elem.origin: %f %f %f\n", elem.origin.x, elem.origin.y, elem.origin.z);
+    denom = vec_scal(ray.direction, elem.normal);
+    if (fabs(denom) < EPSILON) // rayon parallèle au plan
+        return (false);
+    
+    CO = vec_minus(ray.origin, elem.origin);
+    // printf("CO: %f %f %f\n", CO.x, CO.y, CO.z);
+    *t = vec_scal(CO, elem.normal) / denom;
+    
+    // printf("t: %f\n", *t);
+    if (*t < 0) // intersection derrière la caméra
+        return (false);
+
+    local_point->P = vec_plus(ray.origin, vec_mult(*t, ray.direction));
+    local_point->N = normalize(elem.direction); // plan infini, normale constante
+    return (true);
 }
 
 bool sphere_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
@@ -59,7 +76,7 @@ bool sphere_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t
     return (true);
 }
 
-bool intersections(t_rt *rt, t_ray ray, t_point *point, int *sphere_id)
+bool intersections(t_rt *rt, t_ray ray, t_point *point, int *elem_id)
 {
     int i;
     t_point local_point;
@@ -80,10 +97,14 @@ bool intersections(t_rt *rt, t_ray ray, t_point *point, int *sphere_id)
             {
                 rt->min_t = t;
                 *point = local_point;
-                *sphere_id = i;
+                *elem_id = i;
             }
         }
     }
+    // if (*elem_id == 6)
+    // {
+    //     printf("t: %f\n", rt->min_t);
+    // }
     return (has_inter[0]);
 }
 
@@ -118,6 +139,7 @@ void get_color(t_rt *rt, t_vec P, t_vec N, int elem_id)
 {
     t_elem s;
 	s = rt->scene.elem[elem_id];
+
     // 1) composante ambiante (toujours présente, non affectée par l’ombre)
     t_vec ambient = vec_mult(255 * rt->scene.ambient_light.intensity,
                              vec_m_vec(s.albedo, rt->scene.ambient_light.color));
