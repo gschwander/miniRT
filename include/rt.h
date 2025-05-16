@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/05/15 13:03:11 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:28:42 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,21 @@ typedef struct s_scene {
     t_elem *elem;
 } t_scene; 
 
+typedef struct s_data {
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+}					t_data;
+
+
+typedef struct s_param
+{
+	void			*mlx;
+	void			*win;
+}					t_param;
+
 typedef struct s_rt {
     int W;
     int H;
@@ -85,6 +100,8 @@ typedef struct s_rt {
     t_link_list * parsing_heap;
     t_link_list * current_heap;
     t_scene scene;
+    t_param param;
+    t_data img;
 } t_rt;
 
 
@@ -127,5 +144,11 @@ char	**rt_ft_split(t_rt *rt, char const *s, char c);
 
 // find_elem_id.c
 int find_elem_id(t_elem *elem);
+
+// img.c
+bool struct_to_mlx(t_rt *rt);
+
+// hook.c
+int handle_input(t_rt *rt);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 20:37:42 by kgriset           #+#    #+#             */
-/*   Updated: 2025/05/13 14:48:50 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:32:17 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define M_PI 3.14159265358979323846
 # include <stdio.h>
 # include <error.h>
+# include <X11/keysym.h>
 # include <string.h>
 # include <math.h>
 # include <unistd.h>
@@ -22,4 +23,5 @@
 # include <stdbool.h>
 # include "parsing.h"
 # include "get_next_line.h"
+# include "mlx.h"
 #endif

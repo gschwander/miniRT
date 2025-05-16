@@ -20,10 +20,16 @@ C_FILES = 	SRC/main.c \
 			SRC/parsing/element/sphere.c \
 			SRC/parsing/element/cylinder.c \
 			SRC/parsing/element/element_utils.c \
-			SRC/parsing/element/atoi_double.c
+			SRC/parsing/element/atoi_double.c \
+			SRC/MLX/img.c \
+			SRC/MLX/hook.c 
 O_FILES = $(C_FILES:%.c=build/%.o)
 C_FLAGS = -Wall -Werror -Wextra -Iinclude -g
 NAME = miniRT
+
+MLX_DIR = minilibx-linux
+MLX_LIB = $(MLX_DIR)/libmlx.a
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11
 
 .PHONY: all clean fclean re 42libC
 .DEFAULT: all
@@ -33,23 +39,27 @@ all: 42libC $(NAME)
 42libC:
 	$(MAKE) -C 42libC
 
-$(NAME):  $(O_FILES)  | 42libC build 
-	$(CC) -g $(O_FILES) -o $(NAME) -L ./42libC -l:42libC.a -lm
+mlx:
+	$(MAKE) -C $(MLX_DIR)
 
-build/%.o: %.c | 42libC
+$(NAME):  $(O_FILES)  | 42libC mlx build 
+	$(CC) -g $(O_FILES) -o $(NAME) -L ./42libC -l:42libC.a $(MLX_FLAGS) -lm
+
+build/%.o: %.c | build
 	@mkdir -p $(dir $@)
 	$(CC) $(C_FLAGS) -g -c $< -o $@
 
 build:
 	mkdir -p build
-	$(MAKE) -C 42libC
 
 clean:
 	rm -rf build
 	$(MAKE) -C 42libC clean
+	$(MAKE) -C $(MLX_DIR) clean
 
 fclean: clean
 	-rm -f $(NAME)
 	$(MAKE) -C 42libC fclean
+	$(MAKE) -C $(MLX_DIR) clean
 
 re: fclean all

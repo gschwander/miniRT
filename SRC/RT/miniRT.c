@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/15 13:42:20 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/16 07:33:12 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool cylinder_intersection(t_elem elem, t_ray ray, t_point *local_point,
     (void) ray;
     (void) local_point;
     (void) t;
-    return (true);
+    return (false);
 }
 
 bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
@@ -29,7 +29,7 @@ bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
     (void) ray;
     (void) local_point;
     (void) t;
-    return (true);
+    return (false);
 }
 
 bool sphere_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
