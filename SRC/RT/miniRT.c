@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/16 14:16:50 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/17 10:16:16 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
 
     // trouver pourquoi dans certain cas ray.origin n'est pas definie
     
-    printf("ray.origin: %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
-    printf("elem.origin: %f %f %f\n", elem.origin.x, elem.origin.y, elem.origin.z);
+    // printf("ray.origin: %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
+    // printf("elem.origin: %f %f %f\n", elem.origin.x, elem.origin.y, elem.origin.z);
+    ray.origin = vec_plus(local_point->P, vec_mult(0.01, local_point->N));
     denom = vec_scal(ray.direction, elem.normal);
     if (fabs(denom) < EPSILON) // rayon parallèle au plan
         return (false);
@@ -139,7 +140,8 @@ void get_color(t_rt *rt, t_vec P, t_vec N, int elem_id)
 {
     t_elem s;
 	s = rt->scene.elem[elem_id];
-
+    
+    // printf("elem_id: %d\n", elem_id);
     // 1) composante ambiante (toujours présente, non affectée par l’ombre)
     t_vec ambient = vec_mult(255 * rt->scene.ambient_light.intensity,
                              vec_m_vec(s.albedo, rt->scene.ambient_light.color));
