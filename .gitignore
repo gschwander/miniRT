@@ -1,0 +1,8 @@
+# Ignorer tout les .o
+*.o
+
+# Ignorer la mlx
+/minilibx-linux/
+
+# Ignorer dossier
+/build/
