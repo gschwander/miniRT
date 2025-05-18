@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:33:07 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/16 13:36:27 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:53:29 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ void parse_plane(t_rt *rt, char *line)
 	}
 	exit_error(rt, "Error: Invalid number of arguments for plane");
 }
-	

@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/18 18:51:30 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:39:03 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,6 @@ bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
     double denom;
     t_vec CO;
 
-    // trouver pourquoi dans certain cas ray.origin n'est pas definie
-    
-    // printf("ray.origin: %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
-    // printf("elem.origin: %f %f %f\n", elem.origin.x, elem.origin.y, elem.origin.z);
-    
-    // probleme ici lie a l'accumulation de decalages
-    // ray.origin = vec_plus(local_point->P, vec_mult(0.1, local_point->N));
     denom = vec_scal(ray.direction, elem.normal);
     if (fabs(denom) < EPSILON) // rayon parallèle au plan
         return (false);
@@ -48,7 +41,7 @@ bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
         return (false);
 
     local_point->P = vec_plus(ray.origin, vec_mult(*t, ray.direction));
-    local_point->N = normalize(elem.direction); // plan infini, normale constante
+    local_point->N = elem.normal; // plan infini, normale constante
     return (true);
 }
 
@@ -141,7 +134,7 @@ bool shadow(t_rt *rt, t_point *point)
 	return (false);
 }
 
-void get_color(t_rt *rt, t_vec P, t_vec N, int elem_id)
+void get_color(t_rt *rt, t_point point, int elem_id)
 {
     t_elem s;
 	s = rt->scene.elem[elem_id];
@@ -152,9 +145,9 @@ void get_color(t_rt *rt, t_vec P, t_vec N, int elem_id)
                              vec_m_vec(s.albedo, rt->scene.ambient_light.color));
 
     // 2) distance et direction de la lumière
-    t_vec Ldir = normalize(vec_minus(rt->scene.light.origin, P));
-    double   dist2 = norm2(vec_minus(rt->scene.light.origin, P));
-    double   diff_coeff = fmax(0., vec_scal(Ldir, N)) / dist2;
+    t_vec Ldir = normalize(vec_minus(rt->scene.light.origin, point.P));
+    double   dist2 = norm2(vec_minus(rt->scene.light.origin, point.P));
+    double   diff_coeff = fmax(0., vec_scal(Ldir, point.N)) / dist2;
     
     // 3) composante diffuse
     double intensity_lum = 1e4;
@@ -163,7 +156,7 @@ void get_color(t_rt *rt, t_vec P, t_vec N, int elem_id)
 
     // 4) si l’objet est dans l’ombre, on ne garde que l’ambiant
 	t_vec color;
-	if (shadow(rt, &(t_point){ .P = P, .N = N }))
+	if (shadow(rt, &point))
 		color = ambient;
 	else
 		color = vec_plus(ambient, vec_mult(255, diffuse));
@@ -206,7 +199,7 @@ unsigned char * render(t_rt *rt)
             ray.direction = normalize(cal_dir_ray(rt));
             if (intersections(rt, ray, &point, &elem_id))
             {  
-               get_color(rt, point.P, point.N, elem_id);
+               get_color(rt, point, elem_id);
             }
             else
                 color_nul(rt);
