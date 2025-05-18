@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/17 10:16:16 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:51:30 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
     
     // printf("ray.origin: %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
     // printf("elem.origin: %f %f %f\n", elem.origin.x, elem.origin.y, elem.origin.z);
-    ray.origin = vec_plus(local_point->P, vec_mult(0.01, local_point->N));
+    
+    // probleme ici lie a l'accumulation de decalages
+    // ray.origin = vec_plus(local_point->P, vec_mult(0.1, local_point->N));
     denom = vec_scal(ray.direction, elem.normal);
     if (fabs(denom) < EPSILON) // rayon parallèle au plan
         return (false);
@@ -102,10 +104,13 @@ bool intersections(t_rt *rt, t_ray ray, t_point *point, int *elem_id)
             }
         }
     }
-    // if (*elem_id == 6)
-    // {
-    //     printf("t: %f\n", rt->min_t);
-    // }
+    if (rt->min_t > 1E10)
+        return (false);
+    if (rt->min_t < 0.1)
+        return (false);
+    printf("elem_id: %d\n", *elem_id);
+    if (has_inter[0])
+        printf("min_t: %f\n", rt->min_t);
     return (has_inter[0]);
 }
 
