@@ -89,48 +89,61 @@
 //     return (t_cyl > 0 || t_base > 0 || t_top > 0);
 // }
 
-// static bool lat_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
-// {
-//     t_vec CO;
-//     CO = vec_minus(ray.origin, elem.origin);
+static bool cap_inf_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
+{
+    t_vec V = elem.direction;
+    t_vec base = vec_minus(elem.origin, vec_mult(0.5 * elem.height, V));
+    t_vec D = ray.direction;
+    double denom = vec_scal(D, V);
+    double t_base = -1;
+    if (fabs(denom) > EPSILON)
+    {
+        double t1 = vec_scal(vec_minus(base, ray.origin), V) / denom;
+        if (t1 > EPSILON)
+        {
+            t_vec P = vec_plus(ray.origin, vec_mult(t1, D));
+            if (norm2(vec_minus(P, base)) <= elem.radius * elem.radius)
+            {
+                t_base = t1;
+                *t = t_base;
+                point->P = P;
+                point->N = vec_mult(-1, V); // normale vers le bas
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
-//     // ---- Surface latérale ----
-//     t_vec Dp = vec_minus(ray.direction, vec_mult(vec_scal(ray.direction, elem.direction), elem.direction));
-//     t_vec COp = vec_minus(CO, vec_mult(vec_scal(CO, elem.direction), elem.direction));
-//     double a = vec_scal(Dp, Dp);
-//     double b = 2 * vec_scal(Dp, COp);
-//     double c = vec_scal(COp, COp) - (elem.radius * elem.radius);
-//     double delta = b * b - 4 * a * c;
-
-//     double t_cyl = -1;
-//     if (delta >= 0)
-//     {
-//         double sqrt_delta = sqrt(delta);
-//         double t0 = (-b - sqrt_delta) / (2 * a);
-//         double t1 = (-b + sqrt_delta) / (2 * a);
-
-//         if (t0 > EPSILON)
-//             t_cyl = t0;
-//         else if (t1 > EPSILON)
-//             t_cyl = t1;
-
-//         if (t_cyl > 0)
-//         {
-//             t_vec P = vec_plus(ray.origin, vec_mult(t_cyl, ray.direction));
-//             double h = vec_scal(vec_minus(P, elem.origin), elem.direction);
-//             if (h >= 0 && h <= elem.height)
-//             {
-//                 t_vec P_proj = vec_plus(elem.origin, vec_mult(h, elem.direction));
-//                 t_vec N = normalize(vec_minus(P, P_proj));
-//                 *t = t_cyl;
-//                 point->P = P;
-//                 point->N = N;
-//                 return true;
-//             }
-//         }
-//     }
-//     return false;
-// }
+static bool cap_sup_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
+{
+    t_vec top_center = vec_plus(elem.origin, vec_mult(0.5 * elem.height, elem.direction));
+    t_vec V = elem.direction;
+    t_vec D = ray.direction;
+    double denom = vec_scal(D, V);
+    double t_top = -1;
+    if (fabs(denom) > EPSILON)
+    {
+        double t1 = vec_scal(vec_minus(top_center, ray.origin), V) / denom;
+        if (t1 > EPSILON)
+        {
+            t_vec P = vec_plus(ray.origin, vec_mult(t1, D));
+            if (norm2(vec_minus(P, top_center)) <= elem.radius * elem.radius)
+            {
+                // Choix du plus proche entre base et top
+                if (t_top < 0 || t1 < t_top)
+                {
+                    t_top = t1;
+                    *t = t_top;
+                    point->P = P;
+                    point->N = V; // normale vers le haut
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 
 static bool lat_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
 {
@@ -191,8 +204,26 @@ bool cylinder_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
     min_t = 1E99;
     has_inter[0] = false;
     has_inter[1] = lat_intersection(elem, ray, &local_point, t);
-    // has_inter[1] = cap_sup_intersection(elem, ray, &local_point, &t);
-    // has_inter[1] = cap_inf_intersection(elem, ray, &local_point, &t);
+    if (has_inter[1])
+    {
+        has_inter[0] = true;
+        if (*t < min_t)
+        {
+            min_t = *t;
+            *point = local_point;
+        }
+    }
+    has_inter[1] = cap_sup_intersection(elem, ray, &local_point, t);
+    if (has_inter[1])
+    {
+        has_inter[0] = true;
+        if (*t < min_t)
+        {
+            min_t = *t;
+            *point = local_point;
+        }
+    }
+    has_inter[1] = cap_inf_intersection(elem, ray, &local_point, t);
     if (has_inter[1])
     {
         has_inter[0] = true;
