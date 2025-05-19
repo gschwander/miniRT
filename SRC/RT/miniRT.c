@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/18 19:39:03 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/19 07:39:10 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,16 @@ bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
 
     denom = vec_scal(ray.direction, elem.normal);
     if (fabs(denom) < EPSILON) // rayon parallèle au plan
-        return (false);
-    
-    CO = vec_minus(ray.origin, elem.origin);
+    return (false);
+    // attention, ici j'ai inversé le signe de CO
+    CO = vec_minus(elem.origin, ray.origin);
     // printf("CO: %f %f %f\n", CO.x, CO.y, CO.z);
     *t = vec_scal(CO, elem.normal) / denom;
     
     // printf("t: %f\n", *t);
     if (*t < 0) // intersection derrière la caméra
-        return (false);
-
+    return (false);
+    
     local_point->P = vec_plus(ray.origin, vec_mult(*t, ray.direction));
     local_point->N = elem.normal; // plan infini, normale constante
     return (true);
@@ -97,13 +97,8 @@ bool intersections(t_rt *rt, t_ray ray, t_point *point, int *elem_id)
             }
         }
     }
-    if (rt->min_t > 1E10)
-        return (false);
     if (rt->min_t < 0.1)
         return (false);
-    printf("elem_id: %d\n", *elem_id);
-    if (has_inter[0])
-        printf("min_t: %f\n", rt->min_t);
     return (has_inter[0]);
 }
 
