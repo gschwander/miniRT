@@ -3,43 +3,51 @@
 
 static bool cap_inf_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
 {
-    t_vec V = elem.direction;
-    t_vec base = vec_minus(elem.origin, vec_mult(0.5 * elem.height, V));
-    t_vec D = ray.direction;
-    double denom = vec_scal(D, V);
-    double t_base = -1;
+    t_vec base;
+    double denom;
+    t_vec P;
+    double t1;
+    double t_base;
+
+    base = vec_minus(elem.origin, vec_mult(0.5 * elem.height, elem.direction));
+    denom = vec_scal(ray.direction, elem.direction);
+    t_base = -1;
     if (fabs(denom) > EPSILON)
     {
-        double t1 = vec_scal(vec_minus(base, ray.origin), V) / denom;
+        t1 = vec_scal(vec_minus(base, ray.origin), elem.direction) / denom;
         if (t1 > EPSILON)
         {
-            t_vec P = vec_plus(ray.origin, vec_mult(t1, D));
+            P = vec_plus(ray.origin, vec_mult(t1, ray.direction));
             if (norm2(vec_minus(P, base)) <= elem.radius * elem.radius)
             {
                 t_base = t1;
                 *t = t_base;
                 point->P = P;
-                point->N = vec_mult(-1, V); // normale vers le bas
-                return true;
+                point->N = vec_mult(-1, elem.direction);
+                return (true);
             }
         }
     }
-    return false;
+    return (false);
 }
 
 static bool cap_sup_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
 {
-    t_vec top_center = vec_plus(elem.origin, vec_mult(0.5 * elem.height, elem.direction));
-    t_vec V = elem.direction;
-    t_vec D = ray.direction;
-    double denom = vec_scal(D, V);
-    double t_top = -1;
+    t_vec top_center;
+    t_vec P;
+    double t_top;
+    double t1;
+    double denom;
+
+    top_center = vec_plus(elem.origin, vec_mult(0.5 * elem.height, elem.direction));
+    denom = vec_scal(ray.direction, elem.direction);
+    t_top = -1;
     if (fabs(denom) > EPSILON)
     {
-        double t1 = vec_scal(vec_minus(top_center, ray.origin), V) / denom;
+        t1 = vec_scal(vec_minus(top_center, ray.origin), elem.direction) / denom;
         if (t1 > EPSILON)
         {
-            t_vec P = vec_plus(ray.origin, vec_mult(t1, D));
+            P = vec_plus(ray.origin, vec_mult(t1, ray.direction));
             if (norm2(vec_minus(P, top_center)) <= elem.radius * elem.radius)
             {
                 if (t_top < 0 || t1 < t_top)
@@ -47,7 +55,7 @@ static bool cap_sup_intersection(t_elem elem, t_ray ray, t_point *point, double 
                     t_top = t1;
                     *t = t_top;
                     point->P = P;
-                    point->N = V;
+                    point->N = elem.direction;
                     return true;
                 }
             }
