@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/16 10:10:17 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:28:26 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int main(int ac, char **av)
 	rt.W = 1024;
 	rt.H = 1024;
 	rt.current_heap = rt.graphic_heap;
-	// save_img(&rt, render(&rt), rt.W, rt.H);
 	render(&rt);
 	struct_to_mlx(&rt);
 	close(rt.fd_file);

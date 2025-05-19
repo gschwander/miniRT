@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/19 08:27:52 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:35:16 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,36 +122,30 @@ bool shadow(t_rt *rt, t_point *point)
 void get_color(t_rt *rt, t_point point, int elem_id)
 {
     t_elem s;
-	s = rt->scene.elem[elem_id];
-    
-    // printf("elem_id: %d\n", elem_id);
-    // 1) composante ambiante (toujours présente, non affectée par l’ombre)
-    t_vec ambient = vec_mult(255 * rt->scene.ambient_light.intensity,
-                             vec_m_vec(s.albedo, rt->scene.ambient_light.color));
-
-    // 2) distance et direction de la lumière
-    t_vec Ldir = normalize(vec_minus(rt->scene.light.origin, point.P));
-    double   dist2 = norm2(vec_minus(rt->scene.light.origin, point.P));
-    double   diff_coeff = fmax(0., vec_scal(Ldir, point.N)) / dist2;
-    
-    // 3) composante diffuse
-    double intensity_lum = 1e4;
-    t_vec diffuse = vec_mult(intensity_lum * diff_coeff,
-                             vec_m_vec(s.albedo, rt->scene.light.color));
-
-    // 4) si l’objet est dans l’ombre, on ne garde que l’ambiant
-	t_vec color;
+    t_vec color;
+    t_vec ambient;
+    t_vec Ldir;
+    double   dist2;
+    double   diff_coeff;
+    double intensity_lum;
+    t_vec diffuse;
+    int idx;
+	
+    s = rt->scene.elem[elem_id];
+    ambient = vec_mult(255 * rt->scene.ambient_light.intensity, vec_m_vec(s.albedo, rt->scene.ambient_light.color));
+    Ldir = normalize(vec_minus(rt->scene.light.origin, point.P));
+    dist2 = norm2(vec_minus(rt->scene.light.origin, point.P));
+    diff_coeff = fmax(0., vec_scal(Ldir, point.N)) / dist2;
+    intensity_lum = 1e4;
+    diffuse = vec_mult(intensity_lum * diff_coeff, vec_m_vec(s.albedo, rt->scene.light.color));
 	if (shadow(rt, &point))
 		color = ambient;
 	else
 		color = vec_plus(ambient, vec_mult(255, diffuse));
-	
-    // 5) gamma-correction et clamp
     color.x = pow(color.x, 1/2.2);
     color.y = pow(color.y, 1/2.2);
     color.z = pow(color.z, 1/2.2);
-	// printf("color: %f %f %f\n", color.x, color.y, color.z);
-    int idx = ((rt->H - rt->i - 1) * rt->W + rt->j) * 3;
+    idx = ((rt->H - rt->i - 1) * rt->W + rt->j) * 3;
     rt->image[idx + 0] = (unsigned char)(fmin(255., fmax(0., color.x)));
     rt->image[idx + 1] = (unsigned char)(fmin(255., fmax(0., color.y)));
     rt->image[idx + 2] = (unsigned char)(fmin(255., fmax(0., color.z)));
@@ -180,7 +174,6 @@ unsigned char * render(t_rt *rt)
         while (++rt->j < rt->W)
         {
             ray.origin = rt->scene.camera.origin;
-            // ray.origin = (t_vec){0.,0.,0.};
             ray.direction = normalize(cal_dir_ray(rt));
             if (intersections(rt, ray, &point, &elem_id))
             {  

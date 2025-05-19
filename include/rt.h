@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/05/19 11:45:26 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:34:01 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,20 @@ typedef struct s_param
 	void			*win;
 }					t_param;
 
+typedef struct s_rotation
+{
+    double x;
+    double y;
+    double z;
+}   t_rotation;
+typedef struct s_projection
+{
+    t_rotation rot;
+    double translax;
+    double translay;
+    double zoom;
+}   t_projection;
+
 typedef struct s_rt {
     int W;
     int H;
@@ -96,6 +110,7 @@ typedef struct s_rt {
     double fov;
     double min_t;
     unsigned char * image;
+    t_projection project;
     t_link_list * graphic_heap;
     t_link_list * parsing_heap;
     t_link_list * current_heap;
