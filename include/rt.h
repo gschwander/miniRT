@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:25:41 by kgriset           #+#    #+#             */
-/*   Updated: 2025/05/16 10:28:42 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/19 08:53:50 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,9 @@ unsigned char * render (t_rt * rt);
 bool sphere_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t);
 bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t);
 bool cylinder_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t);
+
+// intersection/cylinder.c
+bool cylinder_intersection(t_elem elem, t_ray ray, t_point *point, double *t);
 
 // bmp.c
 void save_img(t_rt * rt, const unsigned char * pixels, int W, int H); // rgb pixel

@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:35:47 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/15 12:25:59 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/19 09:48:21 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void parse_cylinder(t_rt *rt, char *line)
 	if (tab[1] && tab[2] && tab[3] && tab[4])
 	{
 		rt->scene.elem[i].origin = parse_vec(rt, tab[1]);
-		rt->scene.elem[i].direction = parse_vec(rt, tab[2]);
+		rt->scene.elem[i].direction = normalize(parse_vec(rt, tab[2]));
 		if (rt->scene.elem[i].direction.x == 0 && rt->scene.elem[i].direction.y == 0 && rt->scene.elem[i].direction.z == 0)
 			exit_error(rt, "Error: Invalid direction for cylinder");
 		rt->scene.elem[i].radius = ft_atoi_double(tab[3]);

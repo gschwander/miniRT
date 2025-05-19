@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:33:07 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/18 19:53:29 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/19 09:49:17 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void parse_plane(t_rt *rt, char *line)
 	if (tab[1] && tab[2] && tab[3])
 	{
 		rt->scene.elem[i].origin = parse_vec(rt, tab[1]);
-		rt->scene.elem[i].normal = parse_vec(rt, tab[2]);
+		rt->scene.elem[i].normal = normalize(parse_vec(rt, tab[2]));
 		if (rt->scene.elem[i].normal.x == 0 && rt->scene.elem[i].normal.y == 0 && rt->scene.elem[i].normal.z == 0)
 			exit_error(rt, "Error: Invalid normal for plane");
 		rt->scene.elem[i].albedo = vec_mult(1.0 / 255, parse_color(rt, tab[3]));

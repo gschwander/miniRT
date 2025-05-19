@@ -22,7 +22,8 @@ C_FILES = 	SRC/main.c \
 			SRC/parsing/element/element_utils.c \
 			SRC/parsing/element/atoi_double.c \
 			SRC/MLX/img.c \
-			SRC/MLX/hook.c 
+ 	 		SRC/MLX/hook.c \
+			SRC/Intersection/cylinder.c
 O_FILES = $(C_FILES:%.c=build/%.o)
 C_FLAGS = -Wall -Werror -Wextra -Iinclude -g
 NAME = miniRT

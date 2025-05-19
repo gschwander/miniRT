@@ -6,22 +6,12 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/19 07:42:50 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/19 08:27:52 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #define EPSILON 1e-6
-
-bool cylinder_intersection(t_elem elem, t_ray ray, t_point *local_point,
-    double *t)
-{
-    (void) elem;
-    (void) ray;
-    (void) local_point;
-    (void) t;
-    return (false);
-}
 
 bool plane_intersection(t_elem elem, t_ray ray, t_point *local_point, double *t)
 {
