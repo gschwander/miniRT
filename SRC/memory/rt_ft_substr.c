@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rt_ft_substr.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 11:43:36 by gschwand          #+#    #+#             */
+/*   Updated: 2025/05/22 11:43:37 by gschwand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "miniRT.h"
 
 static char	*create_sub(const char *s, char *sub, unsigned int start,
@@ -25,7 +37,7 @@ char	*rt_ft_substr(t_rt *rt, char const *s, unsigned int start, size_t len)
 	l_s = ft_strlen(s);
 	if (start > l_s)
 	{
-		sub = wrap_malloc(rt,  sizeof(*sub));
+		sub = wrap_malloc(rt, sizeof(*sub));
 		if (!sub)
 			return (NULL);
 		*sub = '\0';
@@ -33,7 +45,7 @@ char	*rt_ft_substr(t_rt *rt, char const *s, unsigned int start, size_t len)
 	}
 	while (s[start + i] && i != len)
 		i++;
-	sub = wrap_malloc(rt,  i * sizeof(*sub) + sizeof(*sub));
+	sub = wrap_malloc(rt, i * sizeof(*sub) + sizeof(*sub));
 	if (!sub)
 		return (NULL);
 	else

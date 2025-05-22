@@ -1,5 +1,4 @@
 C_FILES = 	SRC/main.c \
-			SRC/bmp/bmp.c \
 			SRC/memory/rt_ft_split.c \
 			SRC/memory/rt_ft_strdup.c \
 			SRC/memory/rt_ft_substr.c \
@@ -13,6 +12,7 @@ C_FILES = 	SRC/main.c \
 			SRC/parsing/check_args.c \
 			SRC/parsing/open_file.c \
 			SRC/parsing/alloc_rt.c \
+			SRC/parsing/alloc_rt_2.c \
 			SRC/parsing/element/Ambient_light.c \
 			SRC/parsing/element/camera.c \
 			SRC/parsing/element/light.c \
@@ -20,11 +20,13 @@ C_FILES = 	SRC/main.c \
 			SRC/parsing/element/sphere.c \
 			SRC/parsing/element/cylinder.c \
 			SRC/parsing/element/element_utils.c \
+			SRC/parsing/element/element_utils_2.c \
 			SRC/parsing/element/atoi_double.c \
 			SRC/MLX/img.c \
  	 		SRC/MLX/hook.c \
 			SRC/Intersection/cylinder.c \
-			SRC/Intersection/lat_intersection.c
+			SRC/Intersection/lat_intersection.c \
+			SRC/Intersection/intersection.c
 O_FILES = $(C_FILES:%.c=build/%.o)
 C_FLAGS = -Wall -Werror -Wextra -Iinclude -g
 NAME = miniRT

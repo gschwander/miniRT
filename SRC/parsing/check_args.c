@@ -6,13 +6,12 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:37 by gschwand          #+#    #+#             */
-/*   Updated: 2025/04/14 16:10:21 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:03:36 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-// Reverse strncmp
 static int	ft_strrncmp(const char *s1, const char *s2, size_t n)
 {
 	int	lens1;
@@ -42,23 +41,3 @@ int	check_args(int ac, char **av)
 		return (ft_putstr_fd("Error: Wrong file extension\n", 2), 1);
 	return (0);
 }
-
-// int main(void) {
-// 	// Test ft_strrncmp
-// 	printf("Testing ft_strrncmp:\n");
-// 	printf("Test 1: %d\n", ft_strrncmp("hello.rt", ".rt", 3)); // Expected: 0
-// 	printf("Test 2: %d\n", ft_strrncmp("hello.txt", ".rt", 3));
-		// Expected: non-zero
-// 	printf("Test 3: %d\n", ft_strrncmp("hello.rt", ".txt", 3));
-		// Expected: non-zero
-// 	printf("Test 4: %d\n", ft_strrncmp("hello.rt", ".rt", 0)); // Expected: 0
-// 	// Test check_args
-// 	printf("\nTesting check_args:\n");
-// 	char *args1[] = {"program", "file.rt"};
-// 	printf("Test 1: %d\n", check_args(2, args1)); // Expected: 0
-// 	char *args2[] = {"program", "file.txt"};
-// 	printf("Test 2: %d\n", check_args(2, args2)); // Expected: 1
-// 	char *args3[] = {"program"};
-// 	printf("Test 3: %d\n", check_args(1, args3)); // Expected: 1
-// 	return (0);
-// }

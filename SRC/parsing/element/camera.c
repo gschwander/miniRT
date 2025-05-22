@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 10:15:25 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/13 16:48:36 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:46:48 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	parse_camera(t_rt *rt, char *line)
 {
 	char	**tab;
-	
+
 	tab = rt_ft_split(rt, line, ' ');
 	if (tab[1] && tab[2] && tab[3])
 	{
@@ -23,9 +23,9 @@ void	parse_camera(t_rt *rt, char *line)
 		rt->scene.camera.direction = parse_vec(rt, tab[2]);
 		rt->scene.camera.fov = ft_atoi_double(tab[3]);
 		if (rt->scene.camera.fov < 0 || rt->scene.camera.fov > 180)
-            exit_error(rt, "Error: Invalid fov for camera");
+			exit_error(rt, "Error: Invalid fov for camera");
 		rt->scene.camera.fov = rt->scene.camera.fov * M_PI / 180;
-        return;
+		return ;
 	}
-    exit_error(rt, "Error: Invalid number of arguments for camera");
+	exit_error(rt, "Error: Invalid number of arguments for camera");
 }

@@ -6,18 +6,18 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/19 15:28:26 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:34:40 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_rt rt;
-	
+	t_rt	rt;
+
 	if (check_args(ac, av))
-		return(1);
+		return (1);
 	rt = (t_rt){};
 	rt.graphic_heap = init_alloc(&rt.graphic_heap);
 	rt.parsing_heap = init_alloc(&rt.parsing_heap);

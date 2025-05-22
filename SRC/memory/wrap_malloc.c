@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wrap_malloc.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 11:43:41 by gschwand          #+#    #+#             */
+/*   Updated: 2025/05/22 11:44:09 by gschwand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "miniRT.h"
 
-t_link_list *init_alloc(t_link_list **list)
+t_link_list	*init_alloc(t_link_list **list)
 {
 	*list = malloc(sizeof(**list));
 	if (!list)
@@ -10,33 +22,33 @@ t_link_list *init_alloc(t_link_list **list)
 	return (*list);
 }
 
-void free_heap(t_rt *rt)
+void	free_heap(t_rt *rt)
 {
-    if (rt->graphic_heap)
-    {
-        rt->graphic_heap->pf_lstclear(&rt->graphic_heap->first_node, free);
-        free(rt->graphic_heap);
-    }
-    if (rt->parsing_heap)
-    {
-        rt->parsing_heap->pf_lstclear(&rt->parsing_heap->first_node, free);
-        free(rt->parsing_heap);
-    }
+	if (rt->graphic_heap)
+	{
+		rt->graphic_heap->pf_lstclear(&rt->graphic_heap->first_node, free);
+		free(rt->graphic_heap);
+	}
+	if (rt->parsing_heap)
+	{
+		rt->parsing_heap->pf_lstclear(&rt->parsing_heap->first_node, free);
+		free(rt->parsing_heap);
+	}
 }
 
-void	*wrap_malloc(t_rt *rt, size_t size) // add memory error msg ?
+void	*wrap_malloc(t_rt *rt, size_t size)
 {
-    t_list *new_node;
+	t_list	*new_node;
 
 	if (!rt)
 		return (NULL);
 	new_node = malloc(sizeof(*new_node));
 	if (!new_node)
-		return (exit_error(rt,"malloc failed"), NULL);
-        *new_node = (t_list){};
+		return (exit_error(rt, "malloc failed"), NULL);
+	*new_node = (t_list){};
 	new_node->content = malloc(size);
 	if (!new_node->content)
-		return (free(new_node), exit_error(rt,"malloc failed"), NULL);
-    rt->current_heap->pf_lstadd_back(&rt->current_heap->first_node, new_node);
+		return (free(new_node), exit_error(rt, "malloc failed"), NULL);
+	rt->current_heap->pf_lstadd_back(&rt->current_heap->first_node, new_node);
 	return (new_node->content);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rt_ft_split.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 11:43:11 by gschwand          #+#    #+#             */
+/*   Updated: 2025/05/22 11:43:14 by gschwand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "miniRT.h"
 
 static int	ft_check_chr_chr(char c, char set)
@@ -65,7 +77,7 @@ char	**rt_ft_split(t_rt *rt, char const *s, char c)
 	if (!s)
 		return (NULL);
 	countword = ft_countword(s, c);
-    tab = wrap_malloc(rt, (countword + 1) * sizeof(char *));
+	tab = wrap_malloc(rt, (countword + 1) * sizeof(char *));
 	ft_alloc_words(rt, s, c, tab);
 	return (tab);
 }

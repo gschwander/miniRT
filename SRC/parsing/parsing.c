@@ -6,17 +6,17 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:23 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/15 13:07:14 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:04:35 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void    parsing_minirt(t_rt *rt,char *namefile)
+void	parsing_minirt(t_rt *rt, char *namefile)
 {
 	t_file	**file;
 
-    rt->scene = (t_scene){};
+	rt->scene = (t_scene){};
 	file = open_file(rt, namefile);
 	alloc_rt(rt, file);
 	print_scene(rt);
