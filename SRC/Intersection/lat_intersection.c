@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:40:54 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:42:44 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:27:52 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static void	compute_lateral_normal(t_vec P, t_vec base, t_vec V, t_point *point)
 	h = vec_scal(vec_minus(P, base), V);
 	p_proj = vec_plus(base, vec_mult(h, V));
 	n = normalize(vec_minus(P, p_proj));
-	point->P = P;
-	point->N = n;
+	point->p = P;
+	point->n = n;
 }
 
 static double	solve_cylinder_quadratic(t_ray ray, t_vec base, t_vec V,

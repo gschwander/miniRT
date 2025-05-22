@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:00:12 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 12:33:09 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:28:29 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ typedef struct s_ray
 
 typedef struct s_point
 {
-	t_vec			P;
-	t_vec			N;
+	t_vec			p;
+	t_vec			n;
 }					t_point;
 
 typedef struct s_ambient_light
@@ -66,7 +66,8 @@ typedef struct s_elem
 	t_vec			normal;
 	t_vec			direction;
 	double			height;
-	bool			(*intersection)(struct s_elem, t_ray, t_point *, double *);
+	void			(*intersection)(struct s_elem elem, t_ray ray,
+			t_point *point, double *t);
 	void			(*print)(struct s_elem);
 }					t_elem;
 
@@ -96,8 +97,8 @@ typedef struct s_param
 
 typedef struct s_rt
 {
-	int				W;
-	int				H;
+	int				w;
+	int				h;
 	int				i;
 	int				j;
 	int				k;
@@ -133,20 +134,18 @@ t_link_list			*init_alloc(t_link_list **list);
 
 // miniRT.c
 unsigned char		*render(t_rt *rt);
-bool				sphere_intersection(t_elem elem, t_ray ray,
-						t_point *local_point, double *t);
-bool				plane_intersection(t_elem elem, t_ray ray,
-						t_point *local_point, double *t);
-bool				cylinder_intersection(t_elem elem, t_ray ray,
-						t_point *local_point, double *t);
 
 // intersection/intersection.c
 bool				intersections(t_rt *rt, t_ray ray, t_point *point,
 						int *elem_id);
 t_vec				cal_dir_ray(t_rt *rt);
+void				plane_intersection(t_elem elem, t_ray ray,
+						t_point *local_point, double *t);
+void				sphere_intersection(t_elem elem, t_ray ray,
+						t_point *local_point, double *t);
 
 // intersection/cylinder.c
-bool				cylinder_intersection(t_elem elem, t_ray ray,
+void				cylinder_intersection(t_elem elem, t_ray ray,
 						t_point *point, double *t);
 
 // intersection/lat_intersection.c
@@ -162,9 +161,6 @@ void				exit_error(t_rt *rt, char *msg);
 
 // rt_strdup.c
 char				*rt_ft_strdup(t_rt *rt, const char *s);
-
-// rt_ft_strtrim.c
-char				*rt_ft_strtrim(t_rt *rt, char const *s1, char const *set);
 
 // rt_ft_substr.c
 char				*rt_ft_substr(t_rt *rt, char const *s, unsigned int start,

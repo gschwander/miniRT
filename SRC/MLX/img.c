@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:44:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:44:35 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:26:46 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	my_mlx_pixel_put(t_rt *rt, int x, int y, unsigned int color)
 {
 	char	*dst;
 
-	if (x >= rt->W || y >= rt->H || x < 0 || y < 0)
+	if (x >= rt->w || y >= rt->h || x < 0 || y < 0)
 		return ;
 	dst = rt->img.addr + (y * rt->img.line_length + x * (rt->img.bits_per_pixel
 				/ 8));
@@ -30,13 +30,13 @@ void	cast_img(t_rt *rt)
 	int				j;
 	int				index;
 
-	i = rt->H;
+	i = rt->h;
 	while (--i >= 0)
 	{
 		j = -1;
-		while (++j < rt->W)
+		while (++j < rt->w)
 		{
-			index = (i * rt->W + j) * 3;
+			index = (i * rt->w + j) * 3;
 			color = (rt->image[index]) * 256 * 256;
 			color += (rt->image[index + 1]) * 256;
 			color += (unsigned char)(rt->image[index + 2]);
@@ -56,10 +56,10 @@ bool	struct_to_mlx(t_rt *rt)
 	rt->param.mlx = mlx_init();
 	if (!rt->param.mlx)
 		return (false);
-	rt->param.win = mlx_new_window(rt->param.mlx, rt->W, rt->H, "miniRT");
+	rt->param.win = mlx_new_window(rt->param.mlx, rt->w, rt->h, "miniRT");
 	if (!rt->param.win)
 		return (free(rt->param.mlx), false);
-	rt->img.img = mlx_new_image(rt->param.mlx, rt->W, rt->H);
+	rt->img.img = mlx_new_image(rt->param.mlx, rt->w, rt->h);
 	if (!rt->img.img)
 		return (free(rt->param.win), free(rt->param.mlx), false);
 	rt->img.addr = mlx_get_data_addr(rt->img.img, &rt->img.bits_per_pixel,

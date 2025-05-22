@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:07:29 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:40:37 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:28:52 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static bool	cap_inf_intersection(t_elem elem, t_ray ray, t_point *point,
 		return (false);
 	t_base = t1;
 	*t = t_base;
-	point->P = p;
-	point->N = vec_mult(-1, elem.direction);
+	point->p = p;
+	point->n = vec_mult(-1, elem.direction);
 	return (true);
 }
 
@@ -65,8 +65,8 @@ static bool	cap_sup_intersection(t_elem elem, t_ray ray, t_point *point,
 		return (false);
 	t_top = t1;
 	*t = t_top;
-	point->P = p;
-	point->N = elem.direction;
+	point->p = p;
+	point->n = elem.direction;
 	return (true);
 }
 
@@ -76,13 +76,13 @@ static bool	has_inter(double *t, double *min_t, t_point *point,
 	if (*t < *min_t)
 	{
 		*min_t = *t;
-		point->P = local_point.P;
-		point->N = local_point.N;
+		point->p = local_point.p;
+		point->n = local_point.n;
 	}
 	return (true);
 }
 
-bool	cylinder_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
+void	cylinder_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
 {
 	t_point	local_point;
 	bool	e;
@@ -96,5 +96,6 @@ bool	cylinder_intersection(t_elem elem, t_ray ray, t_point *point, double *t)
 		e = has_inter(t, &min_t, point, local_point);
 	if (cap_inf_intersection(elem, ray, &local_point, t))
 		e = has_inter(t, &min_t, point, local_point);
-	return (e);
+	if (e == false)
+		*t = -1;
 }
