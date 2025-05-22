@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:32:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:59:46 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:36:29 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	parse_sphere(t_rt *rt, char *line)
 		rt->scene.elem[i].radius = ft_atoi_double(tab[2]);
 		if (rt->scene.elem[i].radius < 0)
 			exit_error(rt, "Error: Invalid radius for sphere");
-		rt->scene.elem[i].albedo = vec_mult(1.0 / 255, parse_color(rt, tab[3]));
+		rt->scene.elem[i].albedo = vec_div(parse_color(rt, tab[3]), 255);
 		rt->scene.elem[i].intersection = &sphere_intersection;
 		rt->scene.elem[i].print = &print_sphere;
 		return ;

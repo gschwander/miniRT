@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:35:47 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:51:33 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:37:34 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	alloc_cylinder(t_rt *rt, t_elem *cylinder, char **tab)
 	cylinder->height = ft_atoi_double(tab[4]);
 	if (cylinder->height < 0)
 		exit_error(rt, "Error: Invalid height for cylinder");
-	cylinder->albedo = vec_mult(1.0 / 255, parse_color(rt, tab[5]));
+	cylinder->albedo = vec_div(parse_color(rt, tab[5]), 255);
 	cylinder->intersection = &cylinder_intersection;
 	cylinder->print = &print_cylinder;
 }

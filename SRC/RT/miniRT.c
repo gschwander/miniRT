@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 15:28:38 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:40:19 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	color_to_img(t_rt *rt, t_vec color)
 	color.x = pow(color.x, 1 / 2.2);
 	color.y = pow(color.y, 1 / 2.2);
 	color.z = pow(color.z, 1 / 2.2);
+	color = vec_mult(255, color);
 	idx = ((rt->h - rt->i - 1) * rt->w + rt->j) * 3;
 	rt->image[idx + 0] = (unsigned char)(fmin(255., fmax(0., color.x)));
 	rt->image[idx + 1] = (unsigned char)(fmin(255., fmax(0., color.y)));
@@ -53,7 +54,7 @@ void	get_color(t_rt *rt, t_point point, int elem_id)
 	t_vec	diffuse;
 
 	s = rt->scene.elem[elem_id];
-	ambient = vec_mult(255 * rt->scene.ambient_light.intensity,
+	ambient = vec_mult(rt->scene.ambient_light.intensity,
 			vec_m_vec(s.albedo, rt->scene.ambient_light.color));
 	ldir = normalize(vec_minus(rt->scene.light.origin, point.p));
 	diff_coeff = fmax(0., vec_scal(ldir, point.n))
@@ -63,7 +64,7 @@ void	get_color(t_rt *rt, t_point point, int elem_id)
 	if (shadow(rt, &point))
 		color_to_img(rt, ambient);
 	else
-		color_to_img(rt, vec_plus(ambient, vec_mult(255, diffuse)));
+		color_to_img(rt, vec_plus(ambient, diffuse));
 }
 
 void	color_nul(t_rt *rt)

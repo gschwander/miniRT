@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:04:52 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:46:38 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:38:28 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	parse_amb_light(t_rt *rt, char *line)
 		if (rt->scene.ambient_light.intensity < 0
 			|| rt->scene.ambient_light.intensity > 1)
 			exit_error(rt, "Error: Invalid ratio for ambient light");
-		rt->scene.ambient_light.color = parse_color(rt, tab[2]);
+		rt->scene.ambient_light.color = vec_div(parse_color(rt, tab[2]), 255);
 		return ;
 	}
 	exit_error(rt, "Error: Invalid number of arguments for ambient light");

@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:30:27 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:46:22 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:37:51 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	parse_light(t_rt *rt, char *line)
 		rt->scene.light.intensity = ft_atoi_double(tab[2]);
 		if (rt->scene.light.intensity < 0 || rt->scene.light.intensity > 1)
 			exit_error(rt, "Error: Invalid ratio for light");
-		rt->scene.light.color = parse_color(rt, tab[3]);
+		rt->scene.light.color = vec_div(parse_color(rt, tab[3]), 255);
 		return ;
 	}
 	exit_error(rt, "Error: Invalid number of arguments for light");
