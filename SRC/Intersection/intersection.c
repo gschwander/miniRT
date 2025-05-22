@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 12:14:23 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 14:33:22 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:06:00 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,5 @@ bool	intersections(t_rt *rt, t_ray ray, t_point *point, int *elem_id)
 			}
 		}
 	}
-	if (rt->min_t < 0.1)
-		return (false);
 	return (has_inter);
 }

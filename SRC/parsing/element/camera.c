@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 10:15:25 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:46:48 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:43:30 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	parse_camera(t_rt *rt, char *line)
 	if (tab[1] && tab[2] && tab[3])
 	{
 		rt->scene.camera.origin = parse_vec(rt, tab[1]);
-		rt->scene.camera.direction = parse_vec(rt, tab[2]);
+		rt->scene.camera.direction = normalize(parse_vec(rt, tab[2]));
 		rt->scene.camera.fov = ft_atoi_double(tab[3]);
 		if (rt->scene.camera.fov < 0 || rt->scene.camera.fov > 180)
 			exit_error(rt, "Error: Invalid fov for camera");

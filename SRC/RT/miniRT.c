@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:50:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 13:22:58 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:28:38 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ bool	shadow(t_rt *rt, t_point *point)
 	t_ray	ray_light;
 	bool	has_inter_light;
 	t_point	point_light;
-	int		sphere_id;
+	int		elem_id;
 	double	d_light2;
 
 	ray_light.origin = vec_plus(point->p, vec_mult(0.01, point->n));
 	ray_light.direction = normalize(vec_minus(rt->scene.light.origin,
 				point->p));
-	has_inter_light = intersections(rt, ray_light, &point_light, &sphere_id);
+	has_inter_light = intersections(rt, ray_light, &point_light, &elem_id);
 	d_light2 = norm2(vec_minus(rt->scene.light.origin, point->p));
 	if (has_inter_light && rt->min_t * rt->min_t < d_light2)
 		return (true);
