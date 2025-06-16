@@ -1,0 +1,6 @@
+- lorsque la normal de la cam est pos en z 
+elle regarde derriere
+
+- les plans ont leur coordonnees qui sont inverse
+
+- probleme avec la gestion des ombres

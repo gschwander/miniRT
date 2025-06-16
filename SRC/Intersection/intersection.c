@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 12:14:23 by gschwand          #+#    #+#             */
-/*   Updated: 2025/06/16 09:36:26 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:21:05 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,25 @@ t_vec	cal_dir_ray(t_rt *rt)
 		tmp_up = (t_vec){0, 0, 1};
 	right = normalize(cross(rt->scene.camera.direction, tmp_up));
 	up = normalize(cross(right, rt->scene.camera.direction));
-	local.x = (double)(rt->j - rt->w / 2);
+	local.x = (double)(rt->w / 2 - rt->j);
 	local.y = (double)(rt->i - rt->h / 2);
-	local.z = - (double)rt->w / (2.0 * tan(rt->scene.camera.fov / 2.0));
+	local.z = (double) rt->w / (2.0 * tan(rt->scene.camera.fov / 2.0));
 	world_dir = vec_plus(
 			vec_plus(vec_mult(local.x, right), vec_mult(local.y, up)),
 			vec_mult(local.z, rt->scene.camera.direction)
 			);
 	return (normalize(world_dir));
 }
+
+// t_vec	cal_dir_ray(t_rt *rt)
+// {
+// 	t_vec	vec;
+
+// 	vec.x = (rt->j - rt->w / 2) - rt->scene.camera.origin.x;
+// 	vec.y = (rt->i - rt->h / 2) - rt->scene.camera.origin.y;
+// 	vec.z = rt->w / (2 * tan(rt->scene.camera.fov / 2));
+// 	return (vec);
+// }
 
 void	plane_intersection(t_elem elem, t_ray ray, t_point *local_point,
 		double *t)
