@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 12:14:23 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 15:36:04 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/16 09:36:26 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ t_vec	cal_dir_ray(t_rt *rt)
 	t_vec	tmp_up;
 	t_vec	right;
 	t_vec	up;
-	t_vec local;
-	t_vec world_dir;
-	
+	t_vec	local;
+	t_vec	world_dir;
+
 	tmp_up = (t_vec){0, 1, 0};
 	if (fabs(vec_scal(rt->scene.camera.direction, tmp_up)) > 0.999)
 		tmp_up = (t_vec){0, 0, 1};
@@ -30,10 +30,10 @@ t_vec	cal_dir_ray(t_rt *rt)
 	local.y = (double)(rt->i - rt->h / 2);
 	local.z = - (double)rt->w / (2.0 * tan(rt->scene.camera.fov / 2.0));
 	world_dir = vec_plus(
-		vec_plus(vec_mult(local.x, right), vec_mult(local.y, up)),
-		vec_mult(local.z, rt->scene.camera.direction)
-	);
-	return normalize(world_dir);
+			vec_plus(vec_mult(local.x, right), vec_mult(local.y, up)),
+			vec_mult(local.z, rt->scene.camera.direction)
+			);
+	return (normalize(world_dir));
 }
 
 void	plane_intersection(t_elem elem, t_ray ray, t_point *local_point,
@@ -94,7 +94,7 @@ bool	intersections(t_rt *rt, t_ray ray, t_point *point, int *elem_id)
 	while (++rt->k < rt->scene.elem_nb)
 	{
 		rt->scene.elem[rt->k].intersection(rt->scene.elem[rt->k],
-				ray, &local_point, &t);
+			ray, &local_point, &t);
 		if (t > EPSILON)
 		{
 			has_inter = true;
