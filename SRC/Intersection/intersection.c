@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 12:14:23 by gschwand          #+#    #+#             */
-/*   Updated: 2025/06/16 18:21:05 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:39:14 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,6 @@ t_vec	cal_dir_ray(t_rt *rt)
 	return (normalize(world_dir));
 }
 
-// t_vec	cal_dir_ray(t_rt *rt)
-// {
-// 	t_vec	vec;
-
-// 	vec.x = (rt->j - rt->w / 2) - rt->scene.camera.origin.x;
-// 	vec.y = (rt->i - rt->h / 2) - rt->scene.camera.origin.y;
-// 	vec.z = rt->w / (2 * tan(rt->scene.camera.fov / 2));
-// 	return (vec);
-// }
-
 void	plane_intersection(t_elem elem, t_ray ray, t_point *local_point,
 		double *t)
 {
@@ -62,6 +52,8 @@ void	plane_intersection(t_elem elem, t_ray ray, t_point *local_point,
 		return ;
 	local_point->p = vec_plus(ray.origin, vec_mult(*t, ray.direction));
 	local_point->n = elem.normal;
+	if (vec_scal(local_point->n, ray.direction) > 0)
+		local_point->n = vec_mult(-1, local_point->n);
 }
 
 void	sphere_intersection(t_elem elem, t_ray ray, t_point *local_point,
