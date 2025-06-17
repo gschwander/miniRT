@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 09:38:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/06/17 13:04:18 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:09:08 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ t_vec	parse_vec_norm(t_rt *rt, char *line)
 	if (vec.x < -1 || vec.x > 1 || vec.y < -1 || vec.y > 1 || vec.z < -1
 		|| vec.z > 1)
 		exit_error(rt, "Error: Invalid vector");
-	if (fabs(vec.x) < EPSILON && fabs(vec.y) < EPSILON && fabs(vec.z) < EPSILON)
-		exit_error(rt, "Error: Invalid vector");
+	// if (fabs(vec.x) < EPSILON && fabs(vec.y) < EPSILON && fabs(vec.z) < EPSILON)
+	// 	exit_error(rt, "Error: Invalid vector");
 	return (vec);
 }
 
