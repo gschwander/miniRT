@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:35:47 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 14:37:34 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:53:19 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ void	print_cylinder(t_elem elem)
 void	alloc_cylinder(t_rt *rt, t_elem *cylinder, char **tab)
 {
 	cylinder->origin = parse_vec(rt, tab[1]);
-	cylinder->direction = normalize(parse_vec(rt, tab[2]));
-	if (cylinder->direction.x == 0 && cylinder->direction.y == 0
-		&& cylinder->direction.z == 0)
-		exit_error(rt, "Error: Invalid direction for cylinder");
+	cylinder->direction = normalize(parse_vec_norm(rt, tab[2]));
 	cylinder->radius = ft_atoi_double(tab[3]);
 	if (cylinder->radius < 0)
 		exit_error(rt, "Error: Invalid radius for cylinder");
@@ -51,7 +48,7 @@ void	parse_cylinder(t_rt *rt, char *line)
 	i = find_elem_id(rt->scene.elem);
 	rt->scene.elem[i].id = i + 1;
 	tab = rt_ft_split(rt, line, ' ');
-	if (tab[1] && tab[2] && tab[3] && tab[4])
+	if (tab[1] && tab[2] && tab[3] && tab[4] && tab[5] && !tab[6])
 	{
 		alloc_cylinder(rt, &rt->scene.elem[i], tab);
 		return ;

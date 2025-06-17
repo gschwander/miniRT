@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:30:27 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 14:37:51 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:59:59 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	parse_light(t_rt *rt, char *line)
 	char	**tab;
 
 	tab = rt_ft_split(rt, line, ' ');
-	if (tab[1] && tab[2] && tab[3])
+	if (tab[1] && tab[2] && tab[3] && !tab[4])
 	{
 		rt->scene.light.origin = parse_vec(rt, tab[1]);
 		rt->scene.light.intensity = ft_atoi_double(tab[2]);

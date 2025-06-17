@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:32:15 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 14:36:29 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:01:16 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	parse_sphere(t_rt *rt, char *line)
 	i = find_elem_id(rt->scene.elem);
 	rt->scene.elem[i].id = i + 1;
 	tab = rt_ft_split(rt, line, ' ');
-	if (tab[1] && tab[2] && tab[3])
+	if (tab[1] && tab[2] && tab[3] && !tab[4])
 	{
 		rt->scene.elem[i].origin = parse_vec(rt, tab[1]);
 		rt->scene.elem[i].radius = ft_atoi_double(tab[2]);

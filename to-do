@@ -1,0 +1,5 @@
+- verifier qu'il n'y es pas trop d'arg dans le parsing
+
+- check que tout les parametres sont bien teste
+
+-tout les elem d'une normal ne peuvent pas etre null mais attention double

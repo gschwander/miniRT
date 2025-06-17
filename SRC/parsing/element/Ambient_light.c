@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:04:52 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 14:38:28 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:58:39 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	parse_amb_light(t_rt *rt, char *line)
 	char	**tab;
 
 	tab = rt_ft_split(rt, line, ' ');
-	if (tab[1] && tab[2])
+	if (tab[1] && tab[2] && !tab[3])
 	{
 		rt->scene.ambient_light.intensity = ft_atoi_double(tab[1]);
 		if (rt->scene.ambient_light.intensity < 0

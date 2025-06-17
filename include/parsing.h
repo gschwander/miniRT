@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:01:40 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 12:03:19 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:56:43 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void				alloc_scene(t_rt *rt, t_file **file);
 // element/element_utils.c
 t_vec				parse_color(t_rt *rt, char *line);
 t_vec				parse_vec(t_rt *rt, char *line);
+t_vec				parse_vec_norm(t_rt *rt, char *line);
 
 // element/element_utils_2.c
 void				check_size_tab(t_rt *rt, char **tab);

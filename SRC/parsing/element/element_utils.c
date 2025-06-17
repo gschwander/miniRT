@@ -6,7 +6,7 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 09:38:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 11:54:47 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:47:34 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,28 @@ t_vec	parse_color(t_rt *rt, char *line)
 		|| color.y > 255 || color.z > 255)
 		exit_error(rt, "Error: Invalid color");
 	return (color);
+}
+
+t_vec	parse_vec_norm(t_rt *rt, char *line)
+{
+	t_vec	vec;
+	char	**tab;
+
+	vec = (t_vec){};
+	tab = rt_ft_split(rt, line, ',');
+	check_size_tab(rt, tab);
+	check_vec(rt, tab[0]);
+	vec.x = ft_atoi_double(tab[0]);
+	check_vec(rt, tab[1]);
+	vec.y = ft_atoi_double(tab[1]);
+	check_vec(rt, tab[2]);
+	vec.z = ft_atoi_double(tab[2]);
+	if (vec.x < -1 || vec.x > 1 || vec.y < -1 || vec.y > 1
+		|| vec.z < -1 || vec.z > 1)
+		exit_error(rt, "Error: Invalid vector");
+	if (vec.x == 0 && vec.y == 0 && vec.z == 0)
+		exit_error(rt, "Error: Invalid vector");
+	return (vec);
 }
 
 t_vec	parse_vec(t_rt *rt, char *line)
