@@ -6,11 +6,12 @@
 /*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 09:38:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/06/17 12:47:34 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:04:18 by gschwand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#define EPSILON 1e-6
 
 t_vec	parse_color(t_rt *rt, char *line)
 {
@@ -45,10 +46,10 @@ t_vec	parse_vec_norm(t_rt *rt, char *line)
 	vec.y = ft_atoi_double(tab[1]);
 	check_vec(rt, tab[2]);
 	vec.z = ft_atoi_double(tab[2]);
-	if (vec.x < -1 || vec.x > 1 || vec.y < -1 || vec.y > 1
-		|| vec.z < -1 || vec.z > 1)
+	if (vec.x < -1 || vec.x > 1 || vec.y < -1 || vec.y > 1 || vec.z < -1
+		|| vec.z > 1)
 		exit_error(rt, "Error: Invalid vector");
-	if (vec.x == 0 && vec.y == 0 && vec.z == 0)
+	if (fabs(vec.x) < EPSILON && fabs(vec.y) < EPSILON && fabs(vec.z) < EPSILON)
 		exit_error(rt, "Error: Invalid vector");
 	return (vec);
 }
