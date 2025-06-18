@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 10:48:28 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 13:24:54 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:23:58 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(int ac, char **av)
 	t_rt	rt;
 
 	if (check_args(ac, av))
-		return (1);
+		return (EXIT_FAILURE);
 	rt = (t_rt){};
 	rt.graphic_heap = init_alloc(&rt.graphic_heap);
 	rt.parsing_heap = init_alloc(&rt.parsing_heap);
@@ -30,5 +30,5 @@ int	main(int ac, char **av)
 	struct_to_mlx(&rt);
 	close(rt.fd_file);
 	free_heap(&rt);
-	return (0);
+	return (EXIT_SUCCESS);
 }

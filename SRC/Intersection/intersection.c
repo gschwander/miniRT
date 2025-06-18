@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 12:14:23 by gschwand          #+#    #+#             */
-/*   Updated: 2025/06/16 18:39:14 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:58:06 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#define EPSILON 1e-6
 
 t_vec	cal_dir_ray(t_rt *rt)
 {
@@ -56,6 +55,10 @@ void	plane_intersection(t_elem elem, t_ray ray, t_point *local_point,
 		local_point->n = vec_mult(-1, local_point->n);
 }
 
+// The descriminant delta is calculated as b^2 - 4ac which tells intersect.
+// A negative delta (delta < 0) means no real intersection points exist,
+// indicating that the ray does not intersect the sphere.
+// Thus, we return early.
 void	sphere_intersection(t_elem elem, t_ray ray, t_point *local_point,
 		double *t)
 {

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:07:29 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 14:28:52 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:52:30 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#define EPSILON 1e-6
 
 static bool	cap_inf_intersection(t_elem elem, t_ray ray, t_point *point,
 		double *t)
