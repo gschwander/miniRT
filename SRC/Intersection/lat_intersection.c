@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lat_intersection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:40:54 by gschwand          #+#    #+#             */
-/*   Updated: 2025/05/22 13:27:52 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:42:36 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#define EPSILON 1e-6
 
 static void	compute_lateral_normal(t_vec P, t_vec base, t_vec V, t_point *point)
 {

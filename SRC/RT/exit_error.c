@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gschwand <gschwand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:18:50 by kgriset           #+#    #+#             */
-/*   Updated: 2025/05/22 12:06:27 by gschwand         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:31:35 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,5 @@ void	exit_error(t_rt *rt, char *msg)
 	if (rt->fd_file)
 		close(rt->fd_file);
 	free_heap(rt);
-	exit(12);
+	exit(EXIT_FAILURE);
 }
